@@ -14,13 +14,9 @@ typedef struct Browser {
 	struct Browser *next;
 } Browser;
 
-static Browser *browsers = NULL; 
+static Browser *browsers = NULL;
 
-#include "callback.h"
 #include "browser.h"
-/*
-#include "menu.h"
-#include "about.h"
-*/
+#include "callback.h"
 
 #endif /* _DRAGONFLY_H */

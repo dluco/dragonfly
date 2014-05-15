@@ -1,6 +1,6 @@
 #include "dragonfly.h"
 
-static void
+void
 destroy_client (Browser *b)
 {
 	Browser *p;
@@ -26,8 +26,8 @@ destroy_client (Browser *b)
 		gtk_main_quit ();
 }
 
-static void
-destroy_window (GtkWidget* w, Browser *b)
+void
+destroy_window (GtkWidget* widget, Browser *b)
 {
 	destroy_client (b);
 }

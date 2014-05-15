@@ -1,6 +1,6 @@
 #include "dragonfly.h"
 
-static Browser*
+Browser*
 create_browser ()
 {
 	Browser *b;
@@ -18,8 +18,8 @@ create_browser ()
 	gtk_window_set_default_size (GTK_WINDOW (b->window), 800, 600);
 	
 	g_signal_connect (G_OBJECT (b->window),
-					"destroy",
-					G_CALLBACK (destroy_window), b);
+		"delete-event",
+		G_CALLBACK (destroy_window), b);
 					
 	b->next = browsers;
 	

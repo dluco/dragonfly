@@ -4,7 +4,7 @@ CC=gcc
 CFLAGS=-g -Wall $(shell pkg-config --cflags gtk+-2.0) -DVERSION=\"${VERSION}\"
 LDFLAGS+=$(shell pkg-config --libs gtk+-2.0)
 
-OBJ=main.o callback.o browser.o
+OBJ=main.o browser.o callback.o
 
 all: dragonfly
 
