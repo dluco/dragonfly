@@ -9,6 +9,10 @@ destroy_client (Browser *b)
 	 * webkit things
 	*/
 	
+	webkit_web_view_stop_loading (b->webview);
+	gtk_widget_destroy (GTK_WIDGET (b->webview));
+	gtk_widget_destroy (b->scrolled_window);
+	gtk_widget_destroy (b->vbox);
 	gtk_widget_destroy (b->window);
 	
 	for (p = browsers; p && p->next != b; p = p->next);
