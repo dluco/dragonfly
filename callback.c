@@ -165,7 +165,8 @@ void
 on_file_quit (GtkWidget *w, gpointer data)
 {
 	Browser *b = data;
-	destroy_browser (b);
+	/* HACK: calling destroy_window (b) directly produces seg fault */
+	g_signal_emit_by_name (b->window, "destroy");
 }
 
 void
