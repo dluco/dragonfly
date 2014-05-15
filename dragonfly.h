@@ -8,20 +8,19 @@
 #include <webkit/webkit.h>
 
 typedef struct Browser {
-	GtkWidget *window;
-	GtkWidget *vbox;
-	GtkWidget *pane;
-	GtkWidget *scrolled_window;
+	GtkWidget *window, *vbox, *menubar, *pane, *scrolled_window;
 	GtkStatusbar *status_bar;
 	WebKitWebView *webview;
+	WebKitWebInspector *inspector;
 	guint status_context_id;
+	gboolean fullscreen, isinspecting, zoomed;
 	struct Browser *next;
-	gboolean zoomed, fullscreen;
 } Browser;
 
 extern Browser *browsers;
 
-#include "browser.h"
 #include "callback.h"
+#include "browser.h"
+#include "menu.h"
 
 #endif /* _DRAGONFLY_H */

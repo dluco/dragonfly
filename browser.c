@@ -2,11 +2,11 @@
 #include "config.h"
 
 static void
-browser_settings (WebKitWebView *webview)
+browser_settings (Browser *b)
 {
 	WebKitWebSettings *settings;
 	
-	settings = webkit_web_view_get_settings (webview);
+	settings = webkit_web_view_get_settings (b->webview);
 	
 	/* Apply default settings from config.h */
 	g_object_set (G_OBJECT (settings), "user-agent", useragent, NULL);
@@ -18,8 +18,22 @@ browser_settings (WebKitWebView *webview)
 	g_object_set (G_OBJECT (settings), "enable-file-access-from-file-uris", enablefileaccess, NULL);
 	g_object_set (G_OBJECT (settings), "enable-developer-extras", enableinspector, NULL);
 	
-	webkit_web_view_set_transparent (webview, hidebackground);
-	webkit_web_view_set_full_content_zoom (webview, fullcontentzoom);
+	webkit_web_view_set_transparent (b->webview, hidebackground);
+	webkit_web_view_set_full_content_zoom (b->webview, fullcontentzoom);
+	
+	if(enableinspector)
+	{
+		b->inspector = WEBKIT_WEB_INSPECTOR (webkit_web_view_get_inspector (b->webview));
+		g_signal_connect (G_OBJECT (b->inspector), "inspect-web-view",
+			G_CALLBACK (inspector_new), b);
+		g_signal_connect (G_OBJECT (b->inspector), "show-window",
+			G_CALLBACK (inspector_show), b);
+		g_signal_connect(G_OBJECT (b->inspector), "close-window",
+			G_CALLBACK (inspector_close), b);
+		g_signal_connect(G_OBJECT (b->inspector), "finished",
+			G_CALLBACK (inspector_finished), b);
+		b->isinspecting = FALSE;
+	}
 }
 
 /*
@@ -54,7 +68,9 @@ create_browser ()
 	
 	/* VBox */
 	b->vbox = gtk_vbox_new (FALSE, 0);
-	gtk_paned_pack1 (GTK_PANED (b->pane), b->vbox, TRUE, TRUE);
+	
+	/* Menubar */
+	b->menubar = create_menubar (b);
 	
 	/* Scrolled Window */
 	b->scrolled_window = gtk_scrolled_window_new (NULL, NULL);
@@ -70,7 +86,7 @@ create_browser ()
 		"hovering-over-link",
 		G_CALLBACK (link_hover), b);
 	
-	browser_settings (b->webview);
+	browser_settings (b);
 	
 	/* Statusbar */
 	b->status_bar = GTK_STATUSBAR (gtk_statusbar_new ());
@@ -78,9 +94,11 @@ create_browser ()
 	
 	/* Arrange containers */
 	gtk_container_add (GTK_CONTAINER (b->scrolled_window), GTK_WIDGET (b->webview));
-	gtk_container_add (GTK_CONTAINER (b->window), b->pane);
-	gtk_box_pack_start (GTK_BOX (b->vbox), b->scrolled_window, TRUE, TRUE, 0);
+	gtk_paned_pack1 (GTK_PANED (b->pane), b->scrolled_window, TRUE, TRUE);
+	gtk_box_pack_start (GTK_BOX (b->vbox), b->menubar, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (b->vbox), b->pane, TRUE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (b->vbox), GTK_WIDGET (b->status_bar), FALSE, FALSE, 0);
+	gtk_container_add (GTK_CONTAINER (b->window), b->vbox);
 	
 	/* Setup */
 	gtk_box_set_child_packing (GTK_BOX (b->vbox), b->scrolled_window, TRUE,
