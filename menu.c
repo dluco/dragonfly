@@ -180,7 +180,7 @@ create_menubar (Browser *b)
 	gtk_widget_show (tools_item);
 	gtk_widget_show (help_item);
 	
-	gtk_widget_show (menubar);
+	//gtk_widget_show (menubar);
 	
 	return (GtkWidget*)menubar;
 }

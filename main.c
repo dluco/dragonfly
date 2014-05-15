@@ -1,5 +1,4 @@
 #include "dragonfly.h"
-#include "config.h"
 
 Browser *browsers = NULL;
 

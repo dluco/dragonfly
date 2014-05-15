@@ -9,7 +9,9 @@
 
 typedef struct Browser {
 	GtkWidget *window;
-	GtkWidget *vbox, *menubar, *pane, *scrolled_window;
+	GtkWidget *vbox, *menubar, *toolbar, *pane, *scrolled_window;
+	GtkWidget *uri_entry;
+	GtkWidget *search_engine_entry;
 	GtkStatusbar *status_bar;
 	WebKitWebView *webview;
 	WebKitWebInspector *inspector;
@@ -23,5 +25,8 @@ extern Browser *browsers;
 #include "callback.h"
 #include "browser.h"
 #include "menu.h"
+#include "toolbar.h"
+
+#include "config.h"
 
 #endif /* _DRAGONFLY_H */

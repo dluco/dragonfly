@@ -1,5 +1,4 @@
 #include "dragonfly.h"
-#include "config.h"
 
 static void
 browser_settings (Browser *b)
@@ -72,6 +71,9 @@ create_browser ()
 	/* Menubar */
 	b->menubar = create_menubar (b);
 	
+	/* Toolbar */
+	b->toolbar = create_toolbar (b);
+	
 	/* Scrolled Window */
 	b->scrolled_window = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (b->scrolled_window),
@@ -96,6 +98,7 @@ create_browser ()
 	gtk_container_add (GTK_CONTAINER (b->scrolled_window), GTK_WIDGET (b->webview));
 	gtk_paned_pack1 (GTK_PANED (b->pane), b->scrolled_window, TRUE, TRUE);
 	gtk_box_pack_start (GTK_BOX (b->vbox), b->menubar, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (b->vbox), b->toolbar, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (b->vbox), b->pane, TRUE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (b->vbox), GTK_WIDGET (b->status_bar), FALSE, FALSE, 0);
 	gtk_container_add (GTK_CONTAINER (b->window), b->vbox);
@@ -104,11 +107,13 @@ create_browser ()
 	gtk_box_set_child_packing (GTK_BOX (b->vbox), b->scrolled_window, TRUE,
 		TRUE, 0, GTK_PACK_START);
 	gtk_widget_grab_focus (GTK_WIDGET (b->webview));
-	gtk_widget_show (b->pane);
-	gtk_widget_show (b->vbox);
-	gtk_widget_show (b->scrolled_window);
 	gtk_widget_show (GTK_WIDGET (b->webview));
+	gtk_widget_show (b->scrolled_window);
+	gtk_widget_show (b->menubar);
+	gtk_widget_show (b->toolbar);
+	gtk_widget_show (b->pane);
 	gtk_widget_show (GTK_WIDGET (b->status_bar));
+	gtk_widget_show (b->vbox);
 	gtk_widget_show (b->window);
 	
 	b->next = browsers;

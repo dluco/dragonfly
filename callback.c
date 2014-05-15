@@ -49,6 +49,24 @@ destroy_window (GtkWidget* widget, Browser *b)
 	destroy_browser (b);
 }
 
+void
+go_back (GtkWidget* w, Browser *b)
+{
+	webkit_web_view_go_back (b->webview);
+}
+
+void
+go_forward (GtkWidget* w, Browser *b)
+{
+	webkit_web_view_go_forward (b->webview);
+}
+
+void
+go_home (GtkWidget *w, Browser *b)
+{
+	webkit_web_view_load_uri (b->webview, home_page);
+}
+
 WebKitWebView *
 inspector_new (WebKitWebInspector *i, WebKitWebView *v, Browser *b) {
 	return WEBKIT_WEB_VIEW (webkit_web_view_new ());
@@ -163,4 +181,10 @@ on_fullscreen (GtkWidget *w, gpointer data)
 		gtk_window_fullscreen (GTK_WINDOW (b->window));
 	}
 	b->fullscreen = !b->fullscreen;
+}
+
+void
+refresh (GtkWidget* w, Browser *b)
+{
+	webkit_web_view_reload (b->webview);
 }
