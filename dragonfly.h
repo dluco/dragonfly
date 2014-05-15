@@ -8,7 +8,8 @@
 #include <webkit/webkit.h>
 
 typedef struct Browser {
-	GtkWidget *window, *vbox, *menubar, *pane, *scrolled_window;
+	GtkWidget *window;
+	GtkWidget *vbox, *menubar, *pane, *scrolled_window;
 	GtkStatusbar *status_bar;
 	WebKitWebView *webview;
 	WebKitWebInspector *inspector;

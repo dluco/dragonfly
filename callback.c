@@ -102,7 +102,50 @@ link_hover (WebKitWebView* page, const gchar* title, const gchar* link, Browser 
 }
 
 void
-on_print (GtkWidget *w, Browser *b)
+on_file_open (GtkWidget *w, gpointer data)
 {
+	GtkWidget* file_dialog;
+	GtkFileFilter* filter;
+	gchar *filename;
+	
+	Browser *b = data;
+	
+	file_dialog = gtk_file_chooser_dialog_new ("Open File", GTK_WINDOW (b->window), GTK_FILE_CHOOSER_ACTION_OPEN, "Cancel", GTK_RESPONSE_CANCEL, "Open", GTK_RESPONSE_ACCEPT, NULL);
+	
+	/* Add filters to dialog - all and html files */
+	filter = gtk_file_filter_new ();
+	gtk_file_filter_set_name (filter, "All files");
+	gtk_file_filter_add_pattern (filter, "*");
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_dialog), filter);
+	
+	filter = gtk_file_filter_new ();
+	gtk_file_filter_set_name (filter, "HTML files");
+	gtk_file_filter_add_mime_type (filter, "text/html");
+	gtk_file_filter_add_pattern (filter, "*.htm");
+	gtk_file_filter_add_pattern (filter, "*.html");
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_dialog), filter);
+	
+	/* Run the dialog and check result. If a file was selected, open it in the web-view. */							
+	if (gtk_dialog_run (GTK_DIALOG (file_dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		filename = g_strdup_printf("file://%s", gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (file_dialog)));
+		webkit_web_view_load_uri (WEBKIT_WEB_VIEW (b->webview), filename);
+		g_free (filename);
+	}
+	
+	gtk_widget_destroy (file_dialog);
+}
+
+void
+on_file_print (GtkWidget *w, gpointer data)
+{
+	Browser *b = data;
 	webkit_web_frame_print (webkit_web_view_get_main_frame (b->webview));
+}
+
+void
+on_file_quit (GtkWidget *w, gpointer data)
+{
+	Browser *b = data;
+	destroy_browser (b);
 }

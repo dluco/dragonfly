@@ -124,9 +124,9 @@ create_menubar (Browser *b)
 	gtk_menu_append (GTK_MENU (help_menu), about_item);
 	
 	/* Attach the callback functions to the activate signals */
-	//gtk_signal_connect_object (GTK_OBJECT (open_item), "activate", GTK_SIGNAL_FUNC (openfile_cb), (gpointer) "file.open");
-	gtk_signal_connect_object (GTK_OBJECT (print_item), "activate", GTK_SIGNAL_FUNC (on_print), b);
-	gtk_signal_connect_object (GTK_OBJECT (quit_item), "activate", GTK_SIGNAL_FUNC (destroy_window), b);
+	g_signal_connect (G_OBJECT (open_item), "activate", G_CALLBACK (on_file_open), b);
+	g_signal_connect (G_OBJECT (print_item), "activate", G_CALLBACK (on_file_print), b);
+	g_signal_connect (G_OBJECT (quit_item), "activate", G_CALLBACK (on_file_quit), b);
 	//gtk_signal_connect_object (GTK_OBJECT (cut_item), "activate", GTK_SIGNAL_FUNC (cut_cb), (gpointer) "edit.cut");
 	//gtk_signal_connect_object (GTK_OBJECT (copy_item), "activate", GTK_SIGNAL_FUNC (copy_cb), (gpointer) "edit.copy");
 	//gtk_signal_connect_object (GTK_OBJECT (paste_item), "activate", GTK_SIGNAL_FUNC (paste_cb), (gpointer) "edit.paste");
