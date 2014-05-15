@@ -9,18 +9,18 @@ browser_settings (Browser *b)
 	
 	/* Apply default settings from config.h */
 	g_object_set (G_OBJECT (settings), "user-agent", useragent, NULL);
-	g_object_set (G_OBJECT (settings), "auto-load-images", loadimages, NULL);
-	g_object_set (G_OBJECT (settings), "enable-plugins", enableplugins, NULL);
-	g_object_set (G_OBJECT (settings), "enable-scripts", enablescripts, NULL);
-	g_object_set (G_OBJECT (settings), "enable-spatial-navigation", enablespatialbrowsing, NULL);
-	g_object_set (G_OBJECT (settings), "enable-spell-checking", enablespellchecking, NULL);
-	g_object_set (G_OBJECT (settings), "enable-file-access-from-file-uris", enablefileaccess, NULL);
-	g_object_set (G_OBJECT (settings), "enable-developer-extras", enableinspector, NULL);
+	g_object_set (G_OBJECT (settings), "auto-load-images", LOAD_IMAGES, NULL);
+	g_object_set (G_OBJECT (settings), "enable-plugins", ENABLE_PLUGINS, NULL);
+	g_object_set (G_OBJECT (settings), "enable-scripts", ENABLE_SCRIPTS, NULL);
+	g_object_set (G_OBJECT (settings), "enable-spatial-navigation", ENABLE_SPATIAL_BROWSING, NULL);
+	g_object_set (G_OBJECT (settings), "enable-spell-checking", ENALBE_SPELL_CHECKING, NULL);
+	g_object_set (G_OBJECT (settings), "enable-file-access-from-file-uris", ENABLE_FILE_ACCESS, NULL);
+	g_object_set (G_OBJECT (settings), "enable-developer-extras", ENABLE_INSPECTOR, NULL);
 	
-	webkit_web_view_set_transparent (b->webview, hidebackground);
-	webkit_web_view_set_full_content_zoom (b->webview, fullcontentzoom);
+	webkit_web_view_set_transparent (b->webview, HIDE_BACKGROUND);
+	webkit_web_view_set_full_content_zoom (b->webview, FULL_CONTENT_ZOOM);
 	
-	if(enableinspector)
+	if(ENABLE_INSPECTOR)
 	{
 		b->inspector = WEBKIT_WEB_INSPECTOR (webkit_web_view_get_inspector (b->webview));
 		g_signal_connect (G_OBJECT (b->inspector), "inspect-web-view",

@@ -20,7 +20,7 @@ main (int argc, char *argv[])
 	Browser *b = create_browser ();
 	gtk_window_set_title (GTK_WINDOW (b->window), "Dragonfly");
 	
-	gchar* uri = (gchar*) (argc > 1 ? argv[1] : home_page);
+	gchar* uri = (gchar*) (argc > 1 ? argv[1] : HOME_PAGE);
 	webkit_web_view_load_uri (b->webview, uri);
 	
 	gtk_main ();

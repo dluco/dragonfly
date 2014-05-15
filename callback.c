@@ -64,7 +64,7 @@ go_forward (GtkWidget* w, Browser *b)
 void
 go_home (GtkWidget *w, Browser *b)
 {
-	webkit_web_view_load_uri (b->webview, home_page);
+	webkit_web_view_load_uri (b->webview, HOME_PAGE);
 }
 
 WebKitWebView *

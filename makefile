@@ -9,24 +9,31 @@ OBJ=browser.o callback.o main.o menu.o toolbar.o
 all: dragonfly
 
 dragonfly: $(OBJ)
-	$(CC) $(OBJ) $(LDFLAGS) -o dragonfly
+	@echo CC -o dragonfly 
+	@$(CC) $(OBJ) $(LDFLAGS) -o dragonfly
 
 main.o: main.c
-	$(CC) -c $(CFLAGS) main.c
+	@echo CC -c main.c
+	@$(CC) -c $(CFLAGS) main.c
 
 callback.o: callback.c callback.h
-	$(CC) -c $(CFLAGS) callback.c
+	@echo CC -c callback.c
+	@$(CC) -c $(CFLAGS) callback.c
 
 browser.o: browser.c browser.h
-	$(CC) -c $(CFLAGS) browser.c
+	@echo CC -c browser.c
+	@$(CC) -c $(CFLAGS) browser.c
 	
 menu.o: menu.c menu.h
-	$(CC) -c $(CFLAGS) menu.c
+	@echo CC -c menu.c
+	@$(CC) -c $(CFLAGS) menu.c
 	
 toolbar.o: toolbar.c toolbar.h
-	$(CC) -c $(CFLAGS) toolbar.c
+	@echo CC -c toolbar.c
+	@$(CC) -c $(CFLAGS) toolbar.c
 	
 clean:
-	rm -rf $(OBJ) dragonfly
+	@echo cleaning
+	@rm -rf $(OBJ) dragonfly
 	
 .PHONY: all clean
