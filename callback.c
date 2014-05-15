@@ -1,5 +1,12 @@
 #include "dragonfly.h"
 
+WebKitWebView *
+create_window (WebKitWebView  *v, WebKitWebFrame *f, Browser *b)
+{
+	Browser *n = create_browser ();
+	return n->webview;
+}
+
 void
 destroy_browser (Browser *b)
 {
@@ -34,4 +41,16 @@ void
 destroy_window (GtkWidget* widget, Browser *b)
 {
 	destroy_browser (b);
+}
+
+/*
+ * Callback for hovering over a link - show in statusbar
+ */
+void
+link_hover (WebKitWebView* page, const gchar* title, const gchar* link, Browser *b)
+{
+	/* underflow is allowed */
+	gtk_statusbar_pop (b->status_bar, b->status_context_id);
+	if (link)
+		gtk_statusbar_push (b->status_bar, b->status_context_id, link);
 }

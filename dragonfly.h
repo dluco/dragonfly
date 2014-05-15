@@ -14,6 +14,7 @@ typedef struct Browser {
 	GtkWidget *scrolled_window;
 	GtkStatusbar *status_bar;
 	WebKitWebView *webview;
+	guint status_context_id;
 	struct Browser *next;
 	gboolean zoomed, fullscreen;
 } Browser;

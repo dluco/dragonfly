@@ -1,6 +1,6 @@
 #include "dragonfly.h"
 
-Browser*
+Browser *
 create_browser ()
 {
 	Browser *b;
@@ -14,6 +14,7 @@ create_browser ()
 	
 	gtk_window_set_wmclass (GTK_WINDOW (b->window), "dragonfly", "Dragonfly");
 	gtk_window_set_role (GTK_WINDOW (b->window), "Dragonfly");
+	gtk_window_set_icon_name (GTK_WINDOW (b->window), "web-browser");
 	
 	gtk_window_set_default_size (GTK_WINDOW (b->window), 800, 600);
 	
@@ -35,9 +36,16 @@ create_browser ()
 	
 	/* Webview */
 	b->webview = WEBKIT_WEB_VIEW (webkit_web_view_new ());
+	g_signal_connect (G_OBJECT (b->webview),
+		"create-web-view",
+		G_CALLBACK (create_window), b);
+	g_signal_connect (G_OBJECT (b->webview),
+		"hovering-over-link",
+		G_CALLBACK (link_hover), b);
 	
 	/* Statusbar */
 	b->status_bar = GTK_STATUSBAR (gtk_statusbar_new ());
+	b->status_context_id = gtk_statusbar_get_context_id (b->status_bar, "Link Hover");
 	
 	/* Arrange containers */
 	gtk_container_add (GTK_CONTAINER (b->scrolled_window), GTK_WIDGET (b->webview));
