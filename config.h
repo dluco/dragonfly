@@ -2,24 +2,24 @@
 	"AppleWebKit/537.15 (KHTML, like Gecko) Chrome/24.0.1295.0 " \
 	"Safari/537.15"
 
-#define home_page "https://duckduckgo.com/"
+#define HOME_PAGE "https://duckduckgo.com/"
 
-#define download_dir "~/Downloads/"
+#define DOWNLOAD_DIR "~/Downloads/"
 /* 
  * use:
  * 
- * download_dir = buildpath (download_dir);
+ * char *download_directory = buildpath (DOWNLOAD_DIR);
  * 
  * to get the full path
  * */
  
 /* Webkit default features */
-#define enablespatialbrowsing FALSE
-#define enableplugins TRUE
-#define enablescripts TRUE
-#define enablefileaccess TRUE
-#define enableinspector TRUE
-#define loadimages TRUE
-#define enablespellchecking TRUE
-#define hidebackground  FALSE
-#define fullcontentzoom TRUE
+#define ENABLE_SPATIAL_BROWSING FALSE
+#define ENABLE_PLUGINS TRUE
+#define ENABLE_SCRIPTS TRUE
+#define ENABLE_FILE_ACCESS TRUE
+#define ENABLE_INSPECTOR TRUE
+#define LOAD_IMAGES TRUE
+#define ENALBE_SPELL_CHECKING TRUE
+#define HIDE_BACKGROUND  FALSE
+#define FULL_CONTENT_ZOOM TRUE
