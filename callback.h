@@ -12,5 +12,6 @@ void link_hover (WebKitWebView* page, const gchar* title, const gchar* link, Bro
 void on_file_open (GtkWidget *w, gpointer data);
 void on_file_print (GtkWidget *w, gpointer data);
 void on_file_quit (GtkWidget *w, gpointer data);
+void on_fullscreen (GtkWidget *w, gpointer data);
 
 #endif /* _CALLBACK_H */

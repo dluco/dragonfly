@@ -149,3 +149,18 @@ on_file_quit (GtkWidget *w, gpointer data)
 	Browser *b = data;
 	destroy_browser (b);
 }
+
+void
+on_fullscreen (GtkWidget *w, gpointer data)
+{
+	Browser *b = data;
+	
+	if (b->fullscreen)
+	{
+		gtk_window_unfullscreen (GTK_WINDOW (b->window));
+	} else
+	{
+		gtk_window_fullscreen (GTK_WINDOW (b->window));
+	}
+	b->fullscreen = !b->fullscreen;
+}

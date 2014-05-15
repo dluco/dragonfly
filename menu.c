@@ -126,7 +126,7 @@ create_menubar (Browser *b)
 	/* Attach the callback functions to the activate signals */
 	g_signal_connect (G_OBJECT (open_item), "activate", G_CALLBACK (on_file_open), b);
 	g_signal_connect (G_OBJECT (print_item), "activate", G_CALLBACK (on_file_print), b);
-	g_signal_connect (G_OBJECT (quit_item), "activate", G_CALLBACK (on_file_quit), b);
+	g_signal_connect (G_OBJECT (quit_item), "activate", G_CALLBACK (on_file_quit), (gpointer) b);
 	//gtk_signal_connect_object (GTK_OBJECT (cut_item), "activate", GTK_SIGNAL_FUNC (cut_cb), (gpointer) "edit.cut");
 	//gtk_signal_connect_object (GTK_OBJECT (copy_item), "activate", GTK_SIGNAL_FUNC (copy_cb), (gpointer) "edit.copy");
 	//gtk_signal_connect_object (GTK_OBJECT (paste_item), "activate", GTK_SIGNAL_FUNC (paste_cb), (gpointer) "edit.paste");
@@ -136,7 +136,7 @@ create_menubar (Browser *b)
 	//gtk_signal_connect_object (GTK_OBJECT (zoom_in_item), "activate", GTK_SIGNAL_FUNC (zoom_in_cb), (gpointer) "view.zoom-in");
 	//gtk_signal_connect_object (GTK_OBJECT (zoom_out_item), "activate", GTK_SIGNAL_FUNC (zoom_out_cb), (gpointer) "view.zoom-out");
 	//gtk_signal_connect_object (GTK_OBJECT (zoom_reset_item), "activate", GTK_SIGNAL_FUNC (zoom_reset_cb), (gpointer) "view.zoom-reset");
-	//gtk_signal_connect_object (GTK_OBJECT (fullscreen_item), "activate", GTK_SIGNAL_FUNC (fullscreen_cb), (gpointer) "view.fullscreen");
+	g_signal_connect (G_OBJECT (fullscreen_item), "activate", G_CALLBACK (on_fullscreen), (gpointer) b);
 	//gtk_signal_connect_object (GTK_OBJECT (settings_item), "activate", GTK_SIGNAL_FUNC (settings_dialog_cb), (gpointer) "tools.settings");
 	//gtk_signal_connect_object (GTK_OBJECT (about_item), "activate", GTK_SIGNAL_FUNC (about_cb), (gpointer) "help.about");
 	
