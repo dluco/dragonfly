@@ -1,18 +1,18 @@
 #ifndef _DRAGONFLY_H
 #define _DRAGONFLY_H
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <gtk/gtk.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <webkit/webkit.h>
-
-/*#include "config.h"*/
 
 typedef struct Browser {
 	GtkWidget *window;
 	GtkWidget *vbox;
 	GtkWidget *pane;
 	GtkWidget *scrolled_window;
+	GtkStatusbar *status_bar;
 	WebKitWebView *webview;
 	struct Browser *next;
 	gboolean zoomed, fullscreen;

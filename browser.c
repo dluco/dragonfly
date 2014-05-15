@@ -36,10 +36,14 @@ create_browser ()
 	/* Webview */
 	b->webview = WEBKIT_WEB_VIEW (webkit_web_view_new ());
 	
+	/* Statusbar */
+	b->status_bar = GTK_STATUSBAR (gtk_statusbar_new ());
+	
 	/* Arrange containers */
 	gtk_container_add (GTK_CONTAINER (b->scrolled_window), GTK_WIDGET (b->webview));
 	gtk_container_add (GTK_CONTAINER (b->window), b->pane);
-	gtk_container_add (GTK_CONTAINER (b->vbox), b->scrolled_window);
+	gtk_box_pack_start (GTK_BOX (b->vbox), b->scrolled_window, TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (b->vbox), GTK_WIDGET (b->status_bar), FALSE, FALSE, 0);
 	
 	/* Setup */
 	gtk_box_set_child_packing (GTK_BOX (b->vbox), b->scrolled_window, TRUE,
@@ -49,6 +53,7 @@ create_browser ()
 	gtk_widget_show (b->vbox);
 	gtk_widget_show (b->scrolled_window);
 	gtk_widget_show (GTK_WIDGET (b->webview));
+	gtk_widget_show (GTK_WIDGET (b->status_bar));
 	gtk_widget_show (b->window);
 	
 	b->next = browsers;

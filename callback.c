@@ -1,7 +1,7 @@
 #include "dragonfly.h"
 
 void
-destroy_client (Browser *b)
+destroy_browser (Browser *b)
 {
 	Browser *p;
 	
@@ -33,5 +33,5 @@ destroy_client (Browser *b)
 void
 destroy_window (GtkWidget* widget, Browser *b)
 {
-	destroy_client (b);
+	destroy_browser (b);
 }
