@@ -1,5 +1,8 @@
 #include "dragonfly.h"
 
+/*
+ * Create a new browser instance with the provided webview.
+ */
 WebKitWebView *
 create_window (WebKitWebView  *v, WebKitWebFrame *f, Browser *b)
 {
@@ -7,14 +10,14 @@ create_window (WebKitWebView  *v, WebKitWebFrame *f, Browser *b)
 	return n->webview;
 }
 
+/*
+ * Destroy all widgets inside a browser instance, and remove from
+ * browser linked list.
+ */
 void
 destroy_browser (Browser *b)
 {
 	Browser *p;
-	
-	/*
-	 * webkit things
-	*/
 	
 	webkit_web_view_stop_loading (b->webview);
 	gtk_widget_destroy (GTK_WIDGET (b->webview));
@@ -37,6 +40,9 @@ destroy_browser (Browser *b)
 		gtk_main_quit ();
 }
 
+/*
+ * Destroy the browser instance provided.
+ */
 void
 destroy_window (GtkWidget* widget, Browser *b)
 {
@@ -44,7 +50,7 @@ destroy_window (GtkWidget* widget, Browser *b)
 }
 
 /*
- * Callback for hovering over a link - show in statusbar
+ * When hovering over a link, show in statusbar
  */
 void
 link_hover (WebKitWebView* page, const gchar* title, const gchar* link, Browser *b)

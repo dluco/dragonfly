@@ -3,7 +3,9 @@
 
 Browser *browsers = NULL;
 
-
+/*
+ * Destroy all browser instances
+ */
 static void
 cleanup (void)
 {

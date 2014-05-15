@@ -19,7 +19,6 @@ typedef struct Browser {
 	gboolean zoomed, fullscreen;
 } Browser;
 
-/*static Browser *browsers = NULL;*/
 extern Browser *browsers;
 
 #include "browser.h"

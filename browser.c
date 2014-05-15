@@ -1,5 +1,32 @@
 #include "dragonfly.h"
+#include "config.h"
 
+static void
+browser_settings (WebKitWebView *webview)
+{
+	WebKitWebSettings *settings;
+	
+	settings = webkit_web_view_get_settings (webview);
+	
+	/* Apply default settings from config.h */
+	g_object_set (G_OBJECT (settings), "user-agent", useragent, NULL);
+	g_object_set (G_OBJECT (settings), "auto-load-images", loadimages, NULL);
+	g_object_set (G_OBJECT (settings), "enable-plugins", enableplugins, NULL);
+	g_object_set (G_OBJECT (settings), "enable-scripts", enablescripts, NULL);
+	g_object_set (G_OBJECT (settings), "enable-spatial-navigation", enablespatialbrowsing, NULL);
+	g_object_set (G_OBJECT (settings), "enable-spell-checking", enablespellchecking, NULL);
+	g_object_set (G_OBJECT (settings), "enable-file-access-from-file-uris", enablefileaccess, NULL);
+	g_object_set (G_OBJECT (settings), "enable-developer-extras", enableinspector, NULL);
+	
+	webkit_web_view_set_transparent (webview, hidebackground);
+	webkit_web_view_set_full_content_zoom (webview, fullcontentzoom);
+}
+
+/*
+ * Create a new Browser instance, containing a scrolled webview and
+ * statusbar. A pane is used to hold the webview for when the
+ * webinspector is called, which occupies the lower pane.
+ */
 Browser *
 create_browser ()
 {
@@ -42,6 +69,8 @@ create_browser ()
 	g_signal_connect (G_OBJECT (b->webview),
 		"hovering-over-link",
 		G_CALLBACK (link_hover), b);
+	
+	browser_settings (b->webview);
 	
 	/* Statusbar */
 	b->status_bar = GTK_STATUSBAR (gtk_statusbar_new ());
