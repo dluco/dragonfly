@@ -22,6 +22,7 @@ typedef struct Browser {
 
 extern Browser *browsers;
 
+#include "about.h"
 #include "callback.h"
 #include "browser.h"
 #include "menu.h"

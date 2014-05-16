@@ -119,14 +119,86 @@ link_hover (WebKitWebView* page, const gchar* title, const gchar* link, Browser 
 		gtk_statusbar_push (b->status_bar, b->status_context_id, link);
 }
 
+/*
+ * Edit/Cut - cut current selection
+ */
 void
-on_file_open (GtkWidget *w, gpointer data)
+on_edit_cut (GtkWidget* widget, Browser *b)
+{	
+	if (gtk_widget_has_focus (b->uri_entry))
+	{
+		g_signal_emit_by_name (b->uri_entry, "cut-clipboard");
+	} else if (gtk_widget_has_focus (b->search_engine_entry))
+	{
+		g_signal_emit_by_name (b->search_engine_entry, "cut-clipboard");
+	} else
+	{
+		webkit_web_view_cut_clipboard (b->webview);
+	}
+}
+
+/*
+ * Edit/Copy - copy current selection
+ */
+void
+on_edit_copy (GtkWidget* widget, Browser *b)
+{	
+	if (gtk_widget_has_focus (b->uri_entry))
+	{
+		g_signal_emit_by_name (b->uri_entry, "copy-clipboard");
+	} else if (gtk_widget_has_focus (b->search_engine_entry))
+	{
+		g_signal_emit_by_name (b->search_engine_entry, "copy-clipboard");
+	} else
+	{
+		webkit_web_view_copy_clipboard (b->webview);
+	}
+}
+
+/* 
+ * Edit/Delete - delete current selection
+ */
+void
+on_edit_delete (GtkWidget* widget, Browser *b)
+{	
+	if (gtk_widget_has_focus (b->uri_entry))
+	{
+		g_signal_emit_by_name (b->uri_entry, "delete-from-cursor");
+	} else if (gtk_widget_has_focus (b->search_engine_entry))
+	{
+		g_signal_emit_by_name (b->search_engine_entry, "delete-from-cursor");
+	} else
+	{
+		webkit_web_view_delete_selection (b->webview);
+	}
+}
+
+/*
+ * Edit/Paste - paste clipboard
+ */
+void
+on_edit_paste (GtkWidget* widget, Browser *b)
+{
+	if (gtk_widget_has_focus (b->uri_entry))
+	{
+		g_signal_emit_by_name (b->uri_entry, "paste-clipboard");
+	} else if (gtk_widget_has_focus (b->search_engine_entry))
+	{
+		g_signal_emit_by_name (b->search_engine_entry, "paste-clipboard");
+	} else
+	{
+		webkit_web_view_paste_clipboard (b->webview);
+	}
+}
+
+void
+on_file_open (GtkWidget *w, Browser *b)
 {
 	GtkWidget* file_dialog;
 	GtkFileFilter* filter;
 	gchar *filename;
 	
-	Browser *b = data;
+	/*Browser *b = data;*/
 	
 	file_dialog = gtk_file_chooser_dialog_new ("Open File", GTK_WINDOW (b->window), GTK_FILE_CHOOSER_ACTION_OPEN, "Cancel", GTK_RESPONSE_CANCEL, "Open", GTK_RESPONSE_ACCEPT, NULL);
 	
@@ -155,24 +227,26 @@ on_file_open (GtkWidget *w, gpointer data)
 }
 
 void
-on_file_print (GtkWidget *w, gpointer data)
+on_file_print (GtkWidget *w, Browser *b)
 {
-	Browser *b = data;
+	/*Browser *b = data;*/
 	webkit_web_frame_print (webkit_web_view_get_main_frame (b->webview));
 }
 
 void
-on_file_quit (GtkWidget *w, gpointer data)
+on_file_quit (GtkWidget *w, Browser *b)
 {
-	Browser *b = data;
-	/* HACK: calling destroy_window (b) directly produces seg fault */
+	//Browser *b = data;
+	//destroy_browser (b);
+	
+	/*HACK: calling destroy_window (b) directly produces seg fault */
 	g_signal_emit_by_name (b->window, "destroy");
 }
 
 void
-on_fullscreen (GtkWidget *w, gpointer data)
+fullscreen (GtkWidget *w, Browser *b)
 {
-	Browser *b = data;
+	//Browser *b = data;
 	
 	if (b->fullscreen)
 	{
@@ -188,4 +262,41 @@ void
 refresh (GtkWidget* w, Browser *b)
 {
 	webkit_web_view_reload (b->webview);
+}
+
+void
+view_source (GtkWidget *w, Browser *b)
+{
+	gboolean state;
+
+	state = webkit_web_view_get_view_source_mode (b->webview);
+	webkit_web_view_set_view_source_mode (b->webview, !state);
+	refresh (w, b);
+}
+
+/*
+ * Zoom in web-view by 10%
+ */
+void
+zoom_in (GtkWidget* widget, Browser *b)
+{
+	webkit_web_view_zoom_in (b->webview);
+}
+
+/*
+ * Zoom out web-view by 10%
+ */
+void
+zoom_out (GtkWidget* widget, Browser *b)
+{
+	webkit_web_view_zoom_out (b->webview);
+}
+
+/*
+ * Reset zoom level to 100%
+ */
+void
+zoom_reset (GtkWidget* widget, Browser *b)
+{
+	webkit_web_view_set_zoom_level (b->webview, 1.0);
 }

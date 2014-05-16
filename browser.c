@@ -20,6 +20,11 @@ browser_settings (Browser *b)
 	webkit_web_view_set_transparent (b->webview, HIDE_BACKGROUND);
 	webkit_web_view_set_full_content_zoom (b->webview, FULL_CONTENT_ZOOM);
 	
+	/* Initialize fullscreen, zoomed, and isinspecting */
+	b->fullscreen = FALSE;
+	b->isinspecting = FALSE;
+	b->zoomed = FALSE;
+	
 	if(ENABLE_INSPECTOR)
 	{
 		b->inspector = WEBKIT_WEB_INSPECTOR (webkit_web_view_get_inspector (b->webview));

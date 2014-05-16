@@ -12,10 +12,18 @@ gboolean inspector_show (WebKitWebInspector *i, Browser *b);
 gboolean inspector_close (WebKitWebInspector *i, Browser *b);
 void inspector_finished (WebKitWebInspector *i, Browser *b);
 void link_hover (WebKitWebView* page, const gchar* title, const gchar* link, Browser *b);
-void on_file_open (GtkWidget *w, gpointer data);
-void on_file_print (GtkWidget *w, gpointer data);
-void on_file_quit (GtkWidget *w, gpointer data);
-void on_fullscreen (GtkWidget *w, gpointer data);
+void on_edit_copy (GtkWidget* widget, Browser *b);
+void on_edit_cut (GtkWidget* widget, Browser *b);
+void on_edit_delete (GtkWidget* widget, Browser *b);
+void on_edit_paste (GtkWidget* widget, Browser *b);
+void on_file_open (GtkWidget *w, Browser *b);
+void on_file_print (GtkWidget *w, Browser *b);
+void on_file_quit (GtkWidget *w, Browser *b);
+void fullscreen (GtkWidget *w, Browser *b);
 void refresh (GtkWidget* w, Browser *b);
+void view_source (GtkWidget *w, Browser *b);
+void zoom_in (GtkWidget* widget, Browser *b);
+void zoom_out (GtkWidget* widget, Browser *b);
+void zoom_reset (GtkWidget* widget, Browser *b);
 
 #endif /* _CALLBACK_H */

@@ -31,6 +31,7 @@ create_menubar (Browser *b)
 	GtkWidget *zoom_reset_item;
 	GtkWidget *fullscreen_item;
 	GtkWidget *settings_item;
+	GtkWidget *source_item;
 	GtkWidget *about_item;
 	
 	/* Create menubar */
@@ -78,6 +79,7 @@ create_menubar (Browser *b)
 	fullscreen_item = gtk_check_menu_item_new_with_label ("Fullscreen");
 	settings_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PREFERENCES, NULL);
 	gtk_menu_item_set_label (GTK_MENU_ITEM (settings_item), "Settings");
+	source_item = gtk_check_menu_item_new_with_label ("Page Source");
 	about_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_ABOUT, NULL);
 	gtk_menu_item_set_label (GTK_MENU_ITEM (about_item), "About");
 	
@@ -120,25 +122,27 @@ create_menubar (Browser *b)
 	gtk_menu_append (GTK_MENU (view_menu), fullscreen_item);
 	
 	gtk_menu_append (GTK_MENU (tools_menu), settings_item);
+	gtk_menu_append (GTK_MENU (tools_menu), source_item);
 	
 	gtk_menu_append (GTK_MENU (help_menu), about_item);
 	
 	/* Attach the callback functions to the activate signals */
 	g_signal_connect (G_OBJECT (open_item), "activate", G_CALLBACK (on_file_open), b);
 	g_signal_connect (G_OBJECT (print_item), "activate", G_CALLBACK (on_file_print), b);
-	g_signal_connect (G_OBJECT (quit_item), "activate", G_CALLBACK (on_file_quit), (gpointer) b);
-	//gtk_signal_connect_object (GTK_OBJECT (cut_item), "activate", GTK_SIGNAL_FUNC (cut_cb), (gpointer) "edit.cut");
-	//gtk_signal_connect_object (GTK_OBJECT (copy_item), "activate", GTK_SIGNAL_FUNC (copy_cb), (gpointer) "edit.copy");
-	//gtk_signal_connect_object (GTK_OBJECT (paste_item), "activate", GTK_SIGNAL_FUNC (paste_cb), (gpointer) "edit.paste");
-	//gtk_signal_connect_object (GTK_OBJECT (delete_item), "activate", GTK_SIGNAL_FUNC (delete_cb), (gpointer) "edit.delete");
+	g_signal_connect (G_OBJECT (quit_item), "activate", G_CALLBACK (on_file_quit), b);
+	g_signal_connect (G_OBJECT (cut_item), "activate", G_CALLBACK (on_edit_cut), b);
+	g_signal_connect (G_OBJECT (copy_item), "activate", G_CALLBACK (on_edit_copy), b);
+	g_signal_connect (G_OBJECT (paste_item), "activate", G_CALLBACK (on_edit_paste), b);
+	g_signal_connect (G_OBJECT (delete_item), "activate", G_CALLBACK (on_edit_delete), b);
 	//gtk_signal_connect_object (GTK_OBJECT (find_item), "activate", GTK_SIGNAL_FUNC (find_dialog_cb), (gpointer) "edit.find");
 	//gtk_signal_connect_object (GTK_OBJECT (find_next_item), "activate", GTK_SIGNAL_FUNC (find_next_cb), (gpointer) "edit.find-next");
-	//gtk_signal_connect_object (GTK_OBJECT (zoom_in_item), "activate", GTK_SIGNAL_FUNC (zoom_in_cb), (gpointer) "view.zoom-in");
-	//gtk_signal_connect_object (GTK_OBJECT (zoom_out_item), "activate", GTK_SIGNAL_FUNC (zoom_out_cb), (gpointer) "view.zoom-out");
-	//gtk_signal_connect_object (GTK_OBJECT (zoom_reset_item), "activate", GTK_SIGNAL_FUNC (zoom_reset_cb), (gpointer) "view.zoom-reset");
-	g_signal_connect (G_OBJECT (fullscreen_item), "activate", G_CALLBACK (on_fullscreen), (gpointer) b);
+	g_signal_connect (G_OBJECT (zoom_in_item), "activate", G_CALLBACK (zoom_in), b);
+	g_signal_connect (G_OBJECT (zoom_out_item), "activate", G_CALLBACK (zoom_out), b);
+	g_signal_connect (G_OBJECT (zoom_reset_item), "activate", G_CALLBACK (zoom_reset), b);
+	g_signal_connect (G_OBJECT (fullscreen_item), "activate", G_CALLBACK (fullscreen), b);
 	//gtk_signal_connect_object (GTK_OBJECT (settings_item), "activate", GTK_SIGNAL_FUNC (settings_dialog_cb), (gpointer) "tools.settings");
-	//gtk_signal_connect_object (GTK_OBJECT (about_item), "activate", GTK_SIGNAL_FUNC (about_cb), (gpointer) "help.about");
+	g_signal_connect (G_OBJECT (source_item), "activate", G_CALLBACK (view_source), b);
+	g_signal_connect (G_OBJECT (about_item), "activate", G_CALLBACK (about), b);
 	
 	/* Associate menus with items in the menubar */
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (file_item), file_menu);
@@ -172,6 +176,7 @@ create_menubar (Browser *b)
 	gtk_widget_show (zoom_reset_item);
 	gtk_widget_show (fullscreen_item);
 	gtk_widget_show (settings_item);
+	gtk_widget_show (source_item);
 	gtk_widget_show (about_item);
 	
 	gtk_widget_show (file_item);
