@@ -11,8 +11,9 @@ about (GtkWidget* widget, Browser *b)
 	
 	const gchar *authors[] = {"David Luco", "<dluco11@gmail.com>", NULL};
 	
-	/* Set program name and comments */
+	/* Set program name, version, etc. */
 	gtk_about_dialog_set_program_name (GTK_ABOUT_DIALOG (about_dialog), "Dragonfly");
+	gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (about_dialog), VERSION);
 	gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG (about_dialog), "A simple webkit/gtk browser, in the style of surf and midori");
 	
 	/* Set logo to display in dialog */
@@ -23,7 +24,7 @@ about (GtkWidget* widget, Browser *b)
 	/* Set authors, license, and website in dialog */
 	gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG (about_dialog), authors);
 	gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (about_dialog), "Distributed under the MIT license.\nhttp://www.opensource.org/licenses/mit-license.php");
-	//gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (about_dialog), "http://dluco.github.io/sb/");
+	gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (about_dialog), "http://dluco.github.io/dragonfly/");
 	
 	gtk_dialog_run (GTK_DIALOG (about_dialog));
 	
