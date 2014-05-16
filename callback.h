@@ -11,6 +11,7 @@ WebKitWebView *inspector_new (WebKitWebInspector *i, WebKitWebView *v, Browser *
 gboolean inspector_show (WebKitWebInspector *i, Browser *b);
 gboolean inspector_close (WebKitWebInspector *i, Browser *b);
 void inspector_finished (WebKitWebInspector *i, Browser *b);
+void inspector_toggle (GtkWidget *w, Browser *b);
 void link_hover (WebKitWebView* page, const gchar* title, const gchar* link, Browser *b);
 void on_edit_copy (GtkWidget* widget, Browser *b);
 void on_edit_cut (GtkWidget* widget, Browser *b);

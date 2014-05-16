@@ -31,6 +31,7 @@ create_menubar (Browser *b)
 	GtkWidget *zoom_reset_item;
 	GtkWidget *fullscreen_item;
 	GtkWidget *settings_item;
+	GtkWidget *inspector_item;
 	GtkWidget *source_item;
 	GtkWidget *about_item;
 	
@@ -79,6 +80,7 @@ create_menubar (Browser *b)
 	fullscreen_item = gtk_check_menu_item_new_with_label ("Fullscreen");
 	settings_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PREFERENCES, NULL);
 	gtk_menu_item_set_label (GTK_MENU_ITEM (settings_item), "Settings");
+	inspector_item = gtk_check_menu_item_new_with_label ("Inspector");
 	source_item = gtk_check_menu_item_new_with_label ("Page Source");
 	about_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_ABOUT, NULL);
 	gtk_menu_item_set_label (GTK_MENU_ITEM (about_item), "About");
@@ -122,6 +124,7 @@ create_menubar (Browser *b)
 	gtk_menu_append (GTK_MENU (view_menu), fullscreen_item);
 	
 	gtk_menu_append (GTK_MENU (tools_menu), settings_item);
+	gtk_menu_append (GTK_MENU (tools_menu), inspector_item);
 	gtk_menu_append (GTK_MENU (tools_menu), source_item);
 	
 	gtk_menu_append (GTK_MENU (help_menu), about_item);
@@ -141,6 +144,7 @@ create_menubar (Browser *b)
 	g_signal_connect (G_OBJECT (zoom_reset_item), "activate", G_CALLBACK (zoom_reset), b);
 	g_signal_connect (G_OBJECT (fullscreen_item), "activate", G_CALLBACK (fullscreen), b);
 	//gtk_signal_connect_object (GTK_OBJECT (settings_item), "activate", GTK_SIGNAL_FUNC (settings_dialog_cb), (gpointer) "tools.settings");
+	g_signal_connect (G_OBJECT (inspector_item), "activate", G_CALLBACK (inspector_toggle), b);
 	g_signal_connect (G_OBJECT (source_item), "activate", G_CALLBACK (view_source), b);
 	g_signal_connect (G_OBJECT (about_item), "activate", G_CALLBACK (about), b);
 	
@@ -176,6 +180,7 @@ create_menubar (Browser *b)
 	gtk_widget_show (zoom_reset_item);
 	gtk_widget_show (fullscreen_item);
 	gtk_widget_show (settings_item);
+	gtk_widget_show (inspector_item);
 	gtk_widget_show (source_item);
 	gtk_widget_show (about_item);
 	

@@ -77,7 +77,7 @@ inspector_show (WebKitWebInspector *i, Browser *b) {
 	WebKitWebView *w;
 
 	if (b->isinspecting)
-		return false;
+		return FALSE;
 
 	w = webkit_web_inspector_get_web_view (i);
 	gtk_paned_pack2 (GTK_PANED (b->pane), GTK_WIDGET (w), TRUE, TRUE);
@@ -105,6 +105,20 @@ inspector_close (WebKitWebInspector *i, Browser *b) {
 void
 inspector_finished (WebKitWebInspector *i, Browser *b) {
 	g_free (b->inspector);
+}
+
+void
+inspector_toggle (GtkWidget *w, Browser *b)
+{
+	if (b->isinspecting)
+	{
+		webkit_web_inspector_close (b->inspector);
+		//gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), !b->isinspecting);
+	} else
+	{
+		webkit_web_inspector_show (b->inspector);
+		//gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), !b->isinspecting);
+	}
 }
 
 /*
@@ -159,7 +173,7 @@ on_edit_copy (GtkWidget* widget, Browser *b)
  * Edit/Delete - delete current selection
  */
 void
-on_edit_delete (GtkWidget* widget, Browser *b)
+on_edit_delete (GtkWidget *widget, Browser *b)
 {	
 	if (gtk_widget_has_focus (b->uri_entry))
 	{
@@ -177,7 +191,7 @@ on_edit_delete (GtkWidget* widget, Browser *b)
  * Edit/Paste - paste clipboard
  */
 void
-on_edit_paste (GtkWidget* widget, Browser *b)
+on_edit_paste (GtkWidget *widget, Browser *b)
 {
 	if (gtk_widget_has_focus (b->uri_entry))
 	{
@@ -278,7 +292,7 @@ view_source (GtkWidget *w, Browser *b)
  * Zoom in web-view by 10%
  */
 void
-zoom_in (GtkWidget* widget, Browser *b)
+zoom_in (GtkWidget *widget, Browser *b)
 {
 	webkit_web_view_zoom_in (b->webview);
 }
@@ -287,7 +301,7 @@ zoom_in (GtkWidget* widget, Browser *b)
  * Zoom out web-view by 10%
  */
 void
-zoom_out (GtkWidget* widget, Browser *b)
+zoom_out (GtkWidget *widget, Browser *b)
 {
 	webkit_web_view_zoom_out (b->webview);
 }
@@ -296,7 +310,7 @@ zoom_out (GtkWidget* widget, Browser *b)
  * Reset zoom level to 100%
  */
 void
-zoom_reset (GtkWidget* widget, Browser *b)
+zoom_reset (GtkWidget *widget, Browser *b)
 {
 	webkit_web_view_set_zoom_level (b->webview, 1.0);
 }
