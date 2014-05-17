@@ -1,9 +1,12 @@
 #include "dragonfly.h"
 
+#include <gdk/gdkkeysyms.h>
+
 GtkWidget*
 create_menubar (Browser *b)
 {
 	GtkWidget *menubar;
+	GtkAccelGroup *accel_group;
 	
 	GtkWidget *file_item;
 	GtkWidget *edit_item;
@@ -38,12 +41,15 @@ create_menubar (Browser *b)
 	/* Create menubar */
 	menubar = gtk_menu_bar_new ();
 	
+	/* Create accelgroup */
+	accel_group = gtk_accel_group_new ();
+	
 	/* Create entries in menubar */
-	file_item = gtk_menu_item_new_with_label ("File");
-	edit_item = gtk_menu_item_new_with_label ("Edit");
-	view_item = gtk_menu_item_new_with_label ("View");
-	tools_item = gtk_menu_item_new_with_label ("Tools");
-	help_item = gtk_menu_item_new_with_label ("Help");
+	file_item = gtk_menu_item_new_with_mnemonic ("_File");
+	edit_item = gtk_menu_item_new_with_mnemonic ("_Edit");
+	view_item = gtk_menu_item_new_with_mnemonic ("_View");
+	tools_item = gtk_menu_item_new_with_mnemonic ("_Tools");
+	help_item = gtk_menu_item_new_with_mnemonic ("_Help");
 	
 	/* Create File, Edit, and Help Menus */
 	file_menu = gtk_menu_new ();
@@ -53,39 +59,54 @@ create_menubar (Browser *b)
 	help_menu = gtk_menu_new ();
 	
 	/* Create the menu items (and set icons) */
-	open_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_OPEN, NULL);
-	gtk_menu_item_set_label (GTK_MENU_ITEM (open_item), "Open");
-	print_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PRINT, NULL);
-	gtk_menu_item_set_label (GTK_MENU_ITEM (print_item), "Print");
-	quit_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, NULL);
-	gtk_menu_item_set_label (GTK_MENU_ITEM (quit_item), "Quit");
-	cut_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_CUT, NULL);
-	gtk_menu_item_set_label (GTK_MENU_ITEM (cut_item), "Cut");
-	copy_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_COPY, NULL);
-	gtk_menu_item_set_label (GTK_MENU_ITEM (copy_item), "Copy");
-	paste_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PASTE, NULL);
-	gtk_menu_item_set_label (GTK_MENU_ITEM (paste_item), "Paste");
-	delete_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);
-	gtk_menu_item_set_label (GTK_MENU_ITEM (delete_item), "Delete");
-	find_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_FIND, NULL);
-	find_next_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_GO_FORWARD, NULL);
-	gtk_menu_item_set_label (GTK_MENU_ITEM (find_item), "Find...");
-	zoom_in_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_ZOOM_IN, NULL);
-	gtk_menu_item_set_label (GTK_MENU_ITEM (find_next_item), "Find Next");
-	gtk_menu_item_set_label (GTK_MENU_ITEM (zoom_in_item), "Zoom In");
-	zoom_out_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_ZOOM_OUT, NULL);
-	gtk_menu_item_set_label (GTK_MENU_ITEM (zoom_out_item), "Zoom Out");
-	zoom_reset_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_ZOOM_100, NULL);
-	gtk_menu_item_set_label (GTK_MENU_ITEM (zoom_reset_item), "Reset Zoom");
-	fullscreen_item = gtk_check_menu_item_new_with_label ("Fullscreen");
+	open_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_OPEN, accel_group);
+	gtk_menu_item_set_label (GTK_MENU_ITEM (open_item), "_Open");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (open_item), TRUE);
+	print_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PRINT, accel_group);
+	gtk_menu_item_set_label (GTK_MENU_ITEM (print_item), "_Print");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (print_item), TRUE);
+	quit_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, accel_group);
+	gtk_menu_item_set_label (GTK_MENU_ITEM (quit_item), "_Quit");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (quit_item), TRUE);
+	cut_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_CUT, accel_group);
+	gtk_menu_item_set_label (GTK_MENU_ITEM (cut_item), "Cu_t");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (cut_item), TRUE);
+	copy_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_COPY, accel_group);
+	gtk_menu_item_set_label (GTK_MENU_ITEM (copy_item), "_Copy");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (copy_item), TRUE);
+	paste_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PASTE, accel_group);
+	gtk_menu_item_set_label (GTK_MENU_ITEM (paste_item), "_Paste");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (paste_item), TRUE);
+	delete_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, accel_group);
+	gtk_menu_item_set_label (GTK_MENU_ITEM (delete_item), "_Delete");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (delete_item), TRUE);
+	find_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_FIND, accel_group);
+	gtk_menu_item_set_label (GTK_MENU_ITEM (find_item), "_Find...");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (find_item), TRUE);
+	find_next_item = gtk_menu_item_new_with_mnemonic ("Find _Next");
+	zoom_in_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_ZOOM_IN, accel_group);
+	gtk_menu_item_set_label (GTK_MENU_ITEM (zoom_in_item), "Zoom _In");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (zoom_in_item), TRUE);
+	zoom_out_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_ZOOM_OUT, accel_group);
+	gtk_menu_item_set_label (GTK_MENU_ITEM (zoom_out_item), "Zoom _Out");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (zoom_out_item), TRUE);
+	zoom_reset_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_ZOOM_100, accel_group);
+	gtk_menu_item_set_label (GTK_MENU_ITEM (zoom_reset_item), "_Reset Zoom");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (zoom_reset_item), TRUE);
+	fullscreen_item = gtk_check_menu_item_new_with_label ("_Fullscreen");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (fullscreen_item), TRUE);
 	settings_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PREFERENCES, NULL);
-	gtk_menu_item_set_label (GTK_MENU_ITEM (settings_item), "Settings");
-	inspector_item = gtk_check_menu_item_new_with_label ("Inspector");
-	source_item = gtk_check_menu_item_new_with_label ("Page Source");
+	gtk_menu_item_set_label (GTK_MENU_ITEM (settings_item), "_Settings");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (settings_item), TRUE);
+	inspector_item = gtk_check_menu_item_new_with_label ("_Inspector");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (inspector_item), TRUE);
+	source_item = gtk_check_menu_item_new_with_label ("_Page Source");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (source_item), TRUE);
 	about_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_ABOUT, NULL);
-	gtk_menu_item_set_label (GTK_MENU_ITEM (about_item), "About");
+	gtk_menu_item_set_label (GTK_MENU_ITEM (about_item), "_About");
+	gtk_menu_item_set_use_underline (GTK_MENU_ITEM (about_item), TRUE);
 	
-	/* Set up accelerators
+	/* Set up accelerators */
 	gtk_widget_add_accelerator (open_item, "activate", GTK_ACCEL_GROUP (accel_group),  GDK_o, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_add_accelerator (print_item, "activate", GTK_ACCEL_GROUP (accel_group),  GDK_p, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_add_accelerator (quit_item, "activate", GTK_ACCEL_GROUP (accel_group),  GDK_q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
@@ -101,7 +122,8 @@ create_menubar (Browser *b)
 	gtk_widget_add_accelerator (zoom_out_item, "activate", GTK_ACCEL_GROUP (accel_group),  GDK_minus, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_add_accelerator (zoom_reset_item, "activate", GTK_ACCEL_GROUP (accel_group),  GDK_0, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_add_accelerator (fullscreen_item, "activate", GTK_ACCEL_GROUP (accel_group),  GDK_F11, 0, GTK_ACCEL_VISIBLE);
-	*/
+	
+	gtk_widget_add_accelerator (inspector_item, "activate", GTK_ACCEL_GROUP (accel_group),  GDK_I, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	
 	/* Add menu items to the appropriate menu */
 	gtk_menu_append (GTK_MENU (file_menu), open_item);
@@ -137,13 +159,13 @@ create_menubar (Browser *b)
 	g_signal_connect (G_OBJECT (copy_item), "activate", G_CALLBACK (on_edit_copy), b);
 	g_signal_connect (G_OBJECT (paste_item), "activate", G_CALLBACK (on_edit_paste), b);
 	g_signal_connect (G_OBJECT (delete_item), "activate", G_CALLBACK (on_edit_delete), b);
-	//gtk_signal_connect_object (GTK_OBJECT (find_item), "activate", GTK_SIGNAL_FUNC (find_dialog_cb), (gpointer) "edit.find");
-	//gtk_signal_connect_object (GTK_OBJECT (find_next_item), "activate", GTK_SIGNAL_FUNC (find_next_cb), (gpointer) "edit.find-next");
+	g_signal_connect (G_OBJECT (find_item), "activate", G_CALLBACK (search_dialog), b);
+	g_signal_connect (G_OBJECT (find_next_item), "activate", G_CALLBACK (find_next), b);
 	g_signal_connect (G_OBJECT (zoom_in_item), "activate", G_CALLBACK (zoom_in), b);
 	g_signal_connect (G_OBJECT (zoom_out_item), "activate", G_CALLBACK (zoom_out), b);
 	g_signal_connect (G_OBJECT (zoom_reset_item), "activate", G_CALLBACK (zoom_reset), b);
 	g_signal_connect (G_OBJECT (fullscreen_item), "activate", G_CALLBACK (fullscreen), b);
-	//gtk_signal_connect_object (GTK_OBJECT (settings_item), "activate", GTK_SIGNAL_FUNC (settings_dialog_cb), (gpointer) "tools.settings");
+	//g_signal_connect (G_OBJECT (settings_item), "activate", G_CALLBACK (settings), b);
 	g_signal_connect (G_OBJECT (inspector_item), "activate", G_CALLBACK (inspector_toggle), b);
 	g_signal_connect (G_OBJECT (source_item), "activate", G_CALLBACK (view_source), b);
 	g_signal_connect (G_OBJECT (about_item), "activate", G_CALLBACK (about), b);
@@ -162,8 +184,11 @@ create_menubar (Browser *b)
 	gtk_menu_bar_append (GTK_MENU_BAR (menubar), tools_item);
 	gtk_menu_bar_append (GTK_MENU_BAR (menubar), help_item);
 	
-	/* Set up right-click context menu
-	g_signal_connect (GTK_OBJECT (menu_bar), "button-press-event", G_CALLBACK (context_menu_cb), NULL); */
+	/* Add accelgroup to window */
+	gtk_window_add_accel_group (GTK_WINDOW (b->window), accel_group);
+	
+	/* Set up right-click context menu */
+	g_signal_connect (GTK_OBJECT (menubar), "button-press-event", G_CALLBACK (context_menu_popup), b);
 	
 	/* Show widgets */
 	gtk_widget_show (open_item);

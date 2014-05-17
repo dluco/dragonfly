@@ -4,7 +4,7 @@ CC=gcc
 CFLAGS=-g -Wall $(shell pkg-config --cflags gtk+-2.0 webkit-1.0) -DVERSION=\"${VERSION}\"
 LDFLAGS+=$(shell pkg-config --libs gtk+-2.0 webkit-1.0)
 
-OBJ=about.o browser.o callback.o main.o menu.o toolbar.o
+OBJ=about.o browser.o callback.o main.o menu.o search.o toolbar.o
 
 all: dragonfly
 
@@ -31,6 +31,10 @@ browser.o: browser.c browser.h
 menu.o: menu.c menu.h
 	@echo CC -c menu.c
 	@$(CC) -c $(CFLAGS) menu.c
+	
+search.o: search.c search.h
+	@echo CC -c search.c
+	@$(CC) -c $(CFLAGS) search.c
 	
 toolbar.o: toolbar.c toolbar.h
 	@echo CC -c toolbar.c

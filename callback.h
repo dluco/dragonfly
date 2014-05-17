@@ -1,12 +1,14 @@
 #ifndef _CALLBACK_H
 #define _CALLBACK_H
 
+gboolean context_menu_popup (GtkWidget *widget, GdkEventButton *event, Browser *b);
 WebKitWebView *create_window (WebKitWebView  *v, WebKitWebFrame *f, Browser *b);
 void destroy_browser (Browser *b);
 void destroy_window (GtkWidget *widget, Browser *b);
 void go_back (GtkWidget* w, Browser *b);
 void go_forward (GtkWidget* w, Browser *b);
 void go_home (GtkWidget *w, Browser *b);
+void hide_item (GtkWidget *widget, gpointer data);
 WebKitWebView *inspector_new (WebKitWebInspector *i, WebKitWebView *v, Browser *b);
 gboolean inspector_show (WebKitWebInspector *i, Browser *b);
 gboolean inspector_close (WebKitWebInspector *i, Browser *b);
@@ -22,6 +24,7 @@ void on_file_print (GtkWidget *w, Browser *b);
 void on_file_quit (GtkWidget *w, Browser *b);
 void fullscreen (GtkWidget *w, Browser *b);
 void refresh (GtkWidget* w, Browser *b);
+void view_context_menu_popup (GtkWidget *widget, GdkEventButton *event,  Browser *b);
 void view_source (GtkWidget *w, Browser *b);
 void zoom_in (GtkWidget* widget, Browser *b);
 void zoom_out (GtkWidget* widget, Browser *b);

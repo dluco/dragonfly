@@ -72,8 +72,8 @@ create_toolbar (Browser *b)
 	/* Set up accelerators (keyboard shortcuts)
 	gtk_widget_add_accelerator (GTK_WIDGET (back_button), "activate", accel_group, GDK_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE); */
 	
-	/* Set up right-click context menu
-	g_signal_connect (GTK_OBJECT (toolbar), "button-press-event", G_CALLBACK (context_menu), NULL); */
+	/* Set up right-click context menu */
+	g_signal_connect (GTK_OBJECT (toolbar), "button-press-event", G_CALLBACK (context_menu_popup), b);
 	
 	/* Show widgets */
 	gtk_widget_show (GTK_WIDGET (back_button));

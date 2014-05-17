@@ -15,6 +15,7 @@ typedef struct Browser {
 	GtkStatusbar *status_bar;
 	WebKitWebView *webview;
 	WebKitWebInspector *inspector;
+	//GtkAccelGroup *accel_group;
 	guint status_context_id;
 	gboolean fullscreen, isinspecting, zoomed;
 	struct Browser *next;
@@ -26,6 +27,7 @@ extern Browser *browsers;
 #include "callback.h"
 #include "browser.h"
 #include "menu.h"
+#include "search.h"
 #include "toolbar.h"
 
 #include "config.h"

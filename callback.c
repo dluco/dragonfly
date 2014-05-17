@@ -1,6 +1,23 @@
 #include "dragonfly.h"
 
 /*
+ * Callback for pop-up context menu
+ * 
+ * Determine if right mouse button was clicked on the menubar or toolbar
+ */
+gboolean
+context_menu_popup (GtkWidget *widget, GdkEventButton *event, Browser *b)
+{
+	/* single click with the right mouse button? */
+	if (event->type == GDK_BUTTON_PRESS && event->button == 3)
+	{
+		view_context_menu_popup (widget, event, b);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+/*
  * Create a new browser instance with the provided webview.
  */
 WebKitWebView *
@@ -65,6 +82,23 @@ void
 go_home (GtkWidget *w, Browser *b)
 {
 	webkit_web_view_load_uri (b->webview, HOME_PAGE);
+}
+
+/*
+ * Hide or show a widget based on its current visibility
+ */
+void
+hide_item (GtkWidget *widget, gpointer data)
+{
+	/*data = GTK_WIDGET (data) */
+	
+	if (gtk_widget_get_visible (data) == TRUE)
+	{
+		gtk_widget_hide (data);
+		return;
+	}
+	gtk_widget_show (data);
+	return;
 }
 
 WebKitWebView *
@@ -276,6 +310,37 @@ void
 refresh (GtkWidget* w, Browser *b)
 {
 	webkit_web_view_reload (b->webview);
+}
+
+/*
+ * Display context menu for menubar and statusbar visibility
+ */
+void
+view_context_menu_popup (GtkWidget *widget, GdkEventButton *event,  Browser *b)
+{
+	GtkWidget *menu;
+	GtkWidget *hide_menu_bar_item;
+	GtkWidget *hide_status_bar_item;
+	
+	menu = gtk_menu_new ();
+
+	hide_menu_bar_item = gtk_check_menu_item_new_with_label ("Menu Bar");
+	hide_status_bar_item = gtk_check_menu_item_new_with_label ("Status Bar");
+	
+	/* Set initial state of toggle to show if menubar is visible */
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (hide_menu_bar_item), gtk_widget_get_visible (b->menubar));
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (hide_status_bar_item), gtk_widget_get_visible (GTK_WIDGET (b->status_bar)));
+	
+	g_signal_connect (hide_menu_bar_item, "activate", G_CALLBACK (hide_item), b->menubar);
+	g_signal_connect (hide_status_bar_item, "activate", G_CALLBACK (hide_item), b->status_bar);
+	
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), hide_menu_bar_item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), hide_status_bar_item);
+	
+	gtk_widget_show_all (menu);
+	
+	/* Trigger the popup menu to appear */
+	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, (event != NULL) ? event->button : 0, gdk_event_get_time ((GdkEvent*)event));
 }
 
 void
