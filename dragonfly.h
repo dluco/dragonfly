@@ -16,7 +16,9 @@ typedef struct Browser {
 	WebKitWebView *webview;
 	WebKitWebInspector *inspector;
 	//GtkAccelGroup *accel_group;
+	gint progress;
 	guint status_context_id;
+	char *title;
 	gboolean fullscreen, isinspecting, zoomed;
 	struct Browser *next;
 } Browser;

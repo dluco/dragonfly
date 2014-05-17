@@ -1,6 +1,24 @@
 #include "dragonfly.h"
 
 /*
+ * Activation of the url-bar - open web page in web-view
+ */
+void
+activate_uri_entry (GtkWidget *entry, Browser *b)
+{
+	const gchar* uri;
+	const gchar* temp = gtk_entry_get_text (GTK_ENTRY (entry));
+	
+	/* Append appropriate prefix */
+	if (temp[0] == '/')
+		uri = g_strdup_printf ("file://%s", temp);
+	else
+		uri = g_strrstr (temp, "://") ? g_strdup (temp) : g_strdup_printf ("http://%s", temp);
+	
+	webkit_web_view_load_uri (b->webview, uri);
+}
+
+/*
  * Callback for pop-up context menu
  * 
  * Determine if right mouse button was clicked on the menubar or toolbar
@@ -9,8 +27,7 @@ gboolean
 context_menu_popup (GtkWidget *widget, GdkEventButton *event, Browser *b)
 {
 	/* single click with the right mouse button? */
-	if (event->type == GDK_BUTTON_PRESS && event->button == 3)
-	{
+	if (event->type == GDK_BUTTON_PRESS && event->button == 3) {
 		view_context_menu_popup (widget, event, b);
 		return TRUE;
 	}
@@ -44,8 +61,7 @@ destroy_browser (Browser *b)
 	
 	for (p = browsers; p && p->next != b; p = p->next);
 	
-	if (p)
-	{
+	if (p) {
 		p->next = b->next;
 	} else {
 		browsers = b->next;
@@ -64,6 +80,20 @@ void
 destroy_window (GtkWidget* widget, Browser *b)
 {
 	destroy_browser (b);
+}
+
+
+void
+fullscreen (GtkWidget *w, Browser *b)
+{
+	//Browser *b = data;
+	
+	if (b->fullscreen) {
+		gtk_window_unfullscreen (GTK_WINDOW (b->window));
+	} else {
+		gtk_window_fullscreen (GTK_WINDOW (b->window));
+	}
+	b->fullscreen = !b->fullscreen;
 }
 
 void
@@ -92,8 +122,7 @@ hide_item (GtkWidget *widget, gpointer data)
 {
 	/*data = GTK_WIDGET (data) */
 	
-	if (gtk_widget_get_visible (data) == TRUE)
-	{
+	if (gtk_widget_get_visible (data) == TRUE) {
 		gtk_widget_hide (data);
 		return;
 	}
@@ -102,12 +131,14 @@ hide_item (GtkWidget *widget, gpointer data)
 }
 
 WebKitWebView *
-inspector_new (WebKitWebInspector *i, WebKitWebView *v, Browser *b) {
+inspector_new (WebKitWebInspector *i, WebKitWebView *v, Browser *b)
+{
 	return WEBKIT_WEB_VIEW (webkit_web_view_new ());
 }
 
 gboolean
-inspector_show (WebKitWebInspector *i, Browser *b) {
+inspector_show (WebKitWebInspector *i, Browser *b)
+{
 	WebKitWebView *w;
 
 	if (b->isinspecting)
@@ -122,7 +153,8 @@ inspector_show (WebKitWebInspector *i, Browser *b) {
 }
 
 gboolean
-inspector_close (WebKitWebInspector *i, Browser *b) {
+inspector_close (WebKitWebInspector *i, Browser *b)
+{
 	GtkWidget *w;
 
 	if (!b->isinspecting)
@@ -137,19 +169,18 @@ inspector_close (WebKitWebInspector *i, Browser *b) {
 }
 
 void
-inspector_finished (WebKitWebInspector *i, Browser *b) {
+inspector_finished (WebKitWebInspector *i, Browser *b)
+{
 	g_free (b->inspector);
 }
 
 void
 inspector_toggle (GtkWidget *w, Browser *b)
 {
-	if (b->isinspecting)
-	{
+	if (b->isinspecting) {
 		webkit_web_inspector_close (b->inspector);
 		//gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), !b->isinspecting);
-	} else
-	{
+	} else {
 		webkit_web_inspector_show (b->inspector);
 		//gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), !b->isinspecting);
 	}
@@ -167,6 +198,28 @@ link_hover (WebKitWebView* page, const gchar* title, const gchar* link, Browser 
 		gtk_statusbar_push (b->status_bar, b->status_context_id, link);
 }
 
+void
+load_status_change (WebKitWebView *view, GParamSpec *pspec, Browser *b)
+{
+	WebKitWebFrame* frame;
+	const gchar* uri;
+	
+	switch (webkit_web_view_get_load_status (b->webview)) {
+		case WEBKIT_LOAD_COMMITTED:
+			/* Update uri in entry-bar */
+			frame = webkit_web_view_get_main_frame (b->webview);
+			uri = webkit_web_frame_get_uri (frame);
+			if (uri)
+				gtk_entry_set_text (GTK_ENTRY (b->uri_entry), uri);
+			break;
+		case WEBKIT_LOAD_FINISHED:
+			b->progress = 100;
+			break;
+		default:
+			break;
+	}
+}
+
 /*
  * Edit/Cut - cut current selection
  */
@@ -174,15 +227,11 @@ void
 on_edit_cut (GtkWidget* widget, Browser *b)
 {	
 	if (gtk_widget_has_focus (b->uri_entry))
-	{
 		g_signal_emit_by_name (b->uri_entry, "cut-clipboard");
-	} else if (gtk_widget_has_focus (b->search_engine_entry))
-	{
+	else if (gtk_widget_has_focus (b->search_engine_entry))
 		g_signal_emit_by_name (b->search_engine_entry, "cut-clipboard");
-	} else
-	{
+	else
 		webkit_web_view_cut_clipboard (b->webview);
-	}
 }
 
 /*
@@ -192,15 +241,11 @@ void
 on_edit_copy (GtkWidget* widget, Browser *b)
 {	
 	if (gtk_widget_has_focus (b->uri_entry))
-	{
 		g_signal_emit_by_name (b->uri_entry, "copy-clipboard");
-	} else if (gtk_widget_has_focus (b->search_engine_entry))
-	{
+	else if (gtk_widget_has_focus (b->search_engine_entry))
 		g_signal_emit_by_name (b->search_engine_entry, "copy-clipboard");
-	} else
-	{
+	else
 		webkit_web_view_copy_clipboard (b->webview);
-	}
 }
 
 /* 
@@ -210,15 +255,11 @@ void
 on_edit_delete (GtkWidget *widget, Browser *b)
 {	
 	if (gtk_widget_has_focus (b->uri_entry))
-	{
 		g_signal_emit_by_name (b->uri_entry, "delete-from-cursor");
-	} else if (gtk_widget_has_focus (b->search_engine_entry))
-	{
+	else if (gtk_widget_has_focus (b->search_engine_entry))
 		g_signal_emit_by_name (b->search_engine_entry, "delete-from-cursor");
-	} else
-	{
+	else
 		webkit_web_view_delete_selection (b->webview);
-	}
 }
 
 /*
@@ -228,15 +269,11 @@ void
 on_edit_paste (GtkWidget *widget, Browser *b)
 {
 	if (gtk_widget_has_focus (b->uri_entry))
-	{
 		g_signal_emit_by_name (b->uri_entry, "paste-clipboard");
-	} else if (gtk_widget_has_focus (b->search_engine_entry))
-	{
+	else if (gtk_widget_has_focus (b->search_engine_entry))
 		g_signal_emit_by_name (b->search_engine_entry, "paste-clipboard");
-	} else
-	{
+	else
 		webkit_web_view_paste_clipboard (b->webview);
-	}
 }
 
 void
@@ -264,8 +301,7 @@ on_file_open (GtkWidget *w, Browser *b)
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_dialog), filter);
 	
 	/* Run the dialog and check result. If a file was selected, open it in the web-view. */							
-	if (gtk_dialog_run (GTK_DIALOG (file_dialog)) == GTK_RESPONSE_ACCEPT)
-	{
+	if (gtk_dialog_run (GTK_DIALOG (file_dialog)) == GTK_RESPONSE_ACCEPT) {
 		filename = g_strdup_printf("file://%s", gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (file_dialog)));
 		webkit_web_view_load_uri (WEBKIT_WEB_VIEW (b->webview), filename);
 		g_free (filename);
@@ -292,24 +328,44 @@ on_file_quit (GtkWidget *w, Browser *b)
 }
 
 void
-fullscreen (GtkWidget *w, Browser *b)
+progress_change (WebKitWebView *view, GParamSpec *pspec, Browser *b)
 {
-	//Browser *b = data;
-	
-	if (b->fullscreen)
-	{
-		gtk_window_unfullscreen (GTK_WINDOW (b->window));
-	} else
-	{
-		gtk_window_fullscreen (GTK_WINDOW (b->window));
-	}
-	b->fullscreen = !b->fullscreen;
+	b->progress = webkit_web_view_get_progress (b->webview) * 100;
+	update_browser (b);
 }
 
 void
 refresh (GtkWidget* w, Browser *b)
 {
 	webkit_web_view_reload (b->webview);
+}
+
+void
+title_change (WebKitWebView *view, WebKitWebFrame *frame, const char *t, Browser *b)
+{
+	if (b->title)
+		g_free (b->title);
+	b->title = g_strdup (t);
+	update_browser (b);
+}
+
+void
+update_browser (Browser *b)
+{
+	GString *string;
+	gchar *title;
+	
+	string = g_string_new (b->title);
+	g_string_append (string, " - Dragonfly");
+	
+	if (b->progress != 100)
+		g_string_append_printf (string, " (%d%%)", b->progress);
+	
+	title = g_string_free (string, FALSE);
+	
+	gtk_window_set_title (GTK_WINDOW (b->window), title);
+	
+	g_free (title);
 }
 
 /*

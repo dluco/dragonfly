@@ -23,13 +23,13 @@ search_dialog (GtkWidget* widget, Browser *b)
 	GtkWidget *case_button;
 	
 	dialog = gtk_dialog_new_with_buttons ("Find",
-													GTK_WINDOW (b->window),
-													GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-													GTK_STOCK_CANCEL,
-													GTK_RESPONSE_REJECT,
-													GTK_STOCK_FIND,
-													GTK_RESPONSE_ACCEPT,
-													NULL);
+		GTK_WINDOW (b->window),
+		GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_CANCEL,
+		GTK_RESPONSE_REJECT,
+		GTK_STOCK_FIND,
+		GTK_RESPONSE_ACCEPT,
+		NULL);
 	
 	/* Set "Find" button as default button */
 	find_button = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
@@ -69,8 +69,7 @@ search_dialog (GtkWidget* widget, Browser *b)
 	
 	/* Run dialog and check result */
 	gint result = gtk_dialog_run (GTK_DIALOG (dialog));
-	switch (result)
-	{
+	switch (result) {
 		/* "Find" button was pressed/activated - perform search */
 		case GTK_RESPONSE_ACCEPT:
 			webkit_web_view_search_text (b->webview,

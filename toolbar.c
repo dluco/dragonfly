@@ -42,7 +42,7 @@ create_toolbar (Browser *b)
 	
 	/* The URL entry */
 	b->uri_entry = gtk_entry_new ();
-	//g_signal_connect (G_OBJECT (b->uri_entry), "activate", G_CALLBACK (activate_uri_entry_cb), b);
+	g_signal_connect (G_OBJECT (b->uri_entry), "activate", G_CALLBACK (activate_uri_entry), b);
 	
 	/* The search-engine entry */
 	b->search_engine_entry = gtk_entry_new ();

@@ -38,6 +38,8 @@ create_menubar (Browser *b)
 	GtkWidget *source_item;
 	GtkWidget *about_item;
 	
+	GtkWidget *separator;
+	
 	/* Create menubar */
 	menubar = gtk_menu_bar_new ();
 	
@@ -128,21 +130,27 @@ create_menubar (Browser *b)
 	/* Add menu items to the appropriate menu */
 	gtk_menu_append (GTK_MENU (file_menu), open_item);
 	gtk_menu_append (GTK_MENU (file_menu), print_item);
-	gtk_menu_append (GTK_MENU (file_menu), gtk_separator_menu_item_new ());
+	separator = gtk_separator_menu_item_new ();
+	gtk_menu_append (GTK_MENU (file_menu), separator);
+	gtk_widget_show (GTK_WIDGET (separator));
 	gtk_menu_append (GTK_MENU (file_menu), quit_item);
 	
 	gtk_menu_append (GTK_MENU (edit_menu), cut_item);
 	gtk_menu_append (GTK_MENU (edit_menu), copy_item);
 	gtk_menu_append (GTK_MENU (edit_menu), paste_item);
 	gtk_menu_append (GTK_MENU (edit_menu), delete_item);
-	gtk_menu_append (GTK_MENU (edit_menu), gtk_separator_menu_item_new ());
+	separator = gtk_separator_menu_item_new ();
+	gtk_menu_append (GTK_MENU (edit_menu), separator);
+	gtk_widget_show (GTK_WIDGET (separator));
 	gtk_menu_append (GTK_MENU (edit_menu), find_item);
 	gtk_menu_append (GTK_MENU (edit_menu), find_next_item);
 	
 	gtk_menu_append (GTK_MENU (view_menu), zoom_in_item);
 	gtk_menu_append (GTK_MENU (view_menu), zoom_out_item);
 	gtk_menu_append (GTK_MENU (view_menu), zoom_reset_item);
-	gtk_menu_append (GTK_MENU (view_menu), gtk_separator_menu_item_new ());
+	separator = gtk_separator_menu_item_new ();
+	gtk_menu_append (GTK_MENU (view_menu), separator);
+	gtk_widget_show (GTK_WIDGET (separator));
 	gtk_menu_append (GTK_MENU (view_menu), fullscreen_item);
 	
 	gtk_menu_append (GTK_MENU (tools_menu), settings_item);

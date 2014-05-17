@@ -17,6 +17,12 @@ main (int argc, char *argv[])
 {
 	gtk_init (&argc, &argv);
 	
+	if (argc > 1)
+		if (argv[1][1] == 'v') {
+			printf ("surf-"VERSION", 2014 David Luco\n");
+			return 0;
+		}
+	
 	Browser *b = create_browser ();
 	gtk_window_set_title (GTK_WINDOW (b->window), "Dragonfly");
 	

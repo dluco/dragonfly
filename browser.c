@@ -25,8 +25,7 @@ browser_settings (Browser *b)
 	b->isinspecting = FALSE;
 	b->zoomed = FALSE;
 	
-	if(ENABLE_INSPECTOR)
-	{
+	if(ENABLE_INSPECTOR) {
 		b->inspector = WEBKIT_WEB_INSPECTOR (webkit_web_view_get_inspector (b->webview));
 		g_signal_connect (G_OBJECT (b->inspector), "inspect-web-view",
 			G_CALLBACK (inspector_new), b);
@@ -50,8 +49,7 @@ create_browser ()
 {
 	Browser *b;
 	
-	if (!(b = malloc (sizeof (Browser))))
-	{
+	if (!(b = malloc (sizeof (Browser)))) {
 		fprintf (stderr, "Error: Failed to allocate memory\n");
 	}
 	
@@ -92,6 +90,15 @@ create_browser ()
 	g_signal_connect (G_OBJECT (b->webview),
 		"hovering-over-link",
 		G_CALLBACK (link_hover), b);
+	g_signal_connect (G_OBJECT (b->webview),
+		"notify::load-status",
+		G_CALLBACK (load_status_change), b);
+	g_signal_connect (G_OBJECT (b->webview),
+		"notify::progress",
+		G_CALLBACK (progress_change), b);
+	g_signal_connect(G_OBJECT(b->webview),
+		"title-changed",
+		G_CALLBACK(title_change), b);
 	
 	browser_settings (b);
 	
@@ -121,6 +128,7 @@ create_browser ()
 	gtk_widget_show (b->vbox);
 	gtk_widget_show (b->window);
 	
+	b->title = NULL;
 	b->next = browsers;
 	browsers = b;
 	
