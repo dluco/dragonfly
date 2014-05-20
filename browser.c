@@ -91,6 +91,12 @@ create_browser ()
 		"hovering-over-link",
 		G_CALLBACK (link_hover), b);
 	g_signal_connect (G_OBJECT (b->webview),
+		"mime-type-policy-decision-requested",
+		G_CALLBACK (decide_download), b);
+	g_signal_connect (G_OBJECT (b->webview),
+		"download-requested",
+		G_CALLBACK (init_download), b);
+	g_signal_connect (G_OBJECT (b->webview),
 		"notify::load-status",
 		G_CALLBACK (load_status_change), b);
 	g_signal_connect (G_OBJECT (b->webview),

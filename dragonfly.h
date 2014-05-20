@@ -24,13 +24,16 @@ typedef struct Browser {
 } Browser;
 
 extern Browser *browsers;
+//extern char *download_dir;
 
 #include "about.h"
 #include "callback.h"
 #include "browser.h"
+#include "download.h"
 #include "menu.h"
 #include "search.h"
 #include "toolbar.h"
+#include "utils.h"
 
 #include "config.h"
 
