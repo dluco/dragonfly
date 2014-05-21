@@ -16,6 +16,7 @@ void
 search_dialog (GtkWidget* widget, Browser *b)
 {
 	GtkWidget *dialog;
+	gint result;
 	GtkWidget *find_button;
 	GtkWidget *hbox;
 	GtkWidget *find_label;
@@ -68,7 +69,7 @@ search_dialog (GtkWidget* widget, Browser *b)
 	gtk_widget_show (case_button);
 	
 	/* Run dialog and check result */
-	gint result = gtk_dialog_run (GTK_DIALOG (dialog));
+	result = gtk_dialog_run (GTK_DIALOG (dialog));
 	switch (result) {
 		/* "Find" button was pressed/activated - perform search */
 		case GTK_RESPONSE_ACCEPT:

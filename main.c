@@ -1,6 +1,7 @@
 #include "dragonfly.h"
 
 Browser *browsers = NULL;
+char *download_dir;
 
 /*
  * Destroy all browser instances
@@ -10,23 +11,22 @@ cleanup (void)
 {
 	while(browsers)
 		destroy_browser (browsers);
+	g_free (download_dir);
 }
 
-/*static void
+static void
 setup (void)
-{
-	//gtk_init (argc, argv);
-	
+{	
 	// dirs and files
-	//char *download_dir = buildpath (DOWNLOAD_DIR);
-}*/
+	download_dir = buildpath (DOWNLOAD_DIR);
+}
 
 int
 main (int argc, char *argv[])
 {
 	gtk_init (&argc, &argv);
 	
-	//setup ();
+	setup ();
 		
 	if (argc > 1)
 		if (argv[1][1] == 'v') {

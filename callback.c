@@ -319,10 +319,7 @@ on_file_print (GtkWidget *w, Browser *b)
 
 void
 on_file_quit (GtkWidget *w, Browser *b)
-{
-	//Browser *b = data;
-	//destroy_browser (b);
-	
+{	
 	/*HACK: calling destroy_window (b) directly produces seg fault */
 	g_signal_emit_by_name (b->window, "destroy");
 }

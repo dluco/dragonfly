@@ -1,5 +1,7 @@
 #include "dragonfly.h"
 
+extern char *download_dir;
+
 gboolean
 decide_download (WebKitWebView *view, WebKitWebFrame *frame, WebKitNetworkRequest *request, gchar *mimetype,  WebKitWebPolicyDecision *policy_decision, Browser *b)
 {
@@ -11,10 +13,12 @@ decide_download (WebKitWebView *view, WebKitWebFrame *frame, WebKitNetworkReques
 	return FALSE;
 }
 
-static const gchar*
-save_dialog_cb (const gchar *filename, char *directory, Browser *b)
+static const gchar *
+save_dialog (const gchar *filename, char *directory, Browser *b)
 {
 	GtkWidget *dialog;
+	gint result;
+	gchar *pathname;
 	
 	dialog = gtk_file_chooser_dialog_new ("Save File",
 										GTK_WINDOW (b->window),
@@ -28,26 +32,40 @@ save_dialog_cb (const gchar *filename, char *directory, Browser *b)
 	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), directory);
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), filename);
 	
-	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
-		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+	result = gtk_dialog_run (GTK_DIALOG (dialog));
+	switch (result) {
+		case GTK_RESPONSE_ACCEPT:
+			pathname = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+			break;
+		default:
+			pathname = NULL;
+			break;
+	}
 	
 	gtk_widget_destroy (dialog);
 	
-	return filename;
+	return pathname;
 }
 
 gboolean
 init_download (WebKitWebView *view, WebKitDownload *download, Browser *b)
 {
 	const gchar *uri, *filename;
-	char *download_dir;
+	const gchar *pathname = NULL;
+	//char *download_dir;
 	
-	download_dir = buildpath (DOWNLOAD_DIR);
+	//download_dir = buildpath (DOWNLOAD_DIR);
+	filename = webkit_download_get_suggested_filename (download);
 	
-	filename = save_dialog_cb (webkit_download_get_suggested_filename (download), download_dir, b);
+	pathname = save_dialog (filename, download_dir, b);
 	
-	uri = g_strconcat ("file://", filename, NULL);
-	webkit_download_set_destination_uri (download, uri);
+	//g_free (download_dir);
 	
-	return TRUE;
+	if (pathname) {
+		uri = g_strconcat ("file://", pathname, NULL);
+		webkit_download_set_destination_uri (download, uri);
+		
+		return TRUE;
+	}
+	return FALSE;
 }
