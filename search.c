@@ -68,24 +68,26 @@ search_dialog (GtkWidget* widget, Browser *b)
 	gtk_widget_show (hbox);
 	gtk_widget_show (case_button);
 	
-	/* Run dialog and check result */
+	/* Run dialog and save result and button state */
 	result = gtk_dialog_run (GTK_DIALOG (dialog));
+	case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (case_button));
+	
+	/* Destroy the dialog */
+	gtk_widget_destroy (dialog);
+	
 	switch (result) {
 		/* "Find" button was pressed/activated - perform search */
 		case GTK_RESPONSE_ACCEPT:
-			webkit_web_view_search_text (b->webview,
-				gtk_entry_get_text (GTK_ENTRY (find_entry)),
-				gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (case_button)),
+			result = webkit_web_view_search_text (WEBKIT_WEB_VIEW (b->webview),
+				gtk_entry_buffer_get_text (search_buffer),
+				case_sensitive,
 				TRUE,
 				TRUE);
+			if (!result)
+				run_dialog_message (b->window, GTK_MESSAGE_WARNING, "Search string not found");
 			break;
 		/* Cancelled or closed - do nothing */
 		default:
 			break;
 	}
-	
-	case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (case_button));
-
-	/* Destroy the dialog */
-	gtk_widget_destroy (dialog);
 }

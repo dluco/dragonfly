@@ -29,6 +29,7 @@ extern Browser *browsers;
 #include "about.h"
 #include "callback.h"
 #include "browser.h"
+#include "dialog.h"
 #include "download.h"
 #include "menu.h"
 #include "search.h"
