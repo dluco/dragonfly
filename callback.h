@@ -10,7 +10,7 @@ void fullscreen (GtkWidget *w, Browser *b);
 void go_back (GtkWidget* w, Browser *b);
 void go_forward (GtkWidget* w, Browser *b);
 void go_home (GtkWidget *w, Browser *b);
-void hide_item (GtkWidget *widget, gpointer data);
+void toggle_widget (GtkWidget *widget, gpointer data);
 WebKitWebView *inspector_new (WebKitWebInspector *i, WebKitWebView *v, Browser *b);
 gboolean inspector_show (WebKitWebInspector *i, Browser *b);
 gboolean inspector_close (WebKitWebInspector *i, Browser *b);

@@ -4,10 +4,10 @@ GtkWidget*
 create_toolbar (Browser *b)
 {
 	GtkWidget *toolbar;
-	GtkToolItem *back_button;
-	GtkToolItem *forward_button;
-	GtkToolItem *refresh_button;
-	GtkToolItem *home_button;
+	//GtkToolItem *b->back_button;
+	//GtkToolItem *b->forward_button;
+	//GtkToolItem *b->refresh_button;
+	//GtkToolItem *b->home_button;
 	GtkToolItem *item;
 	GtkWidget *h_paned;
 	
@@ -17,22 +17,22 @@ create_toolbar (Browser *b)
 	gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_BOTH_HORIZ);
 
 	/* the back button */
-	back_button = gtk_tool_button_new_from_stock (GTK_STOCK_GO_BACK);
-	gtk_widget_set_tooltip_text (GTK_WIDGET (back_button), "Go back to the previous page");
-	g_signal_connect (G_OBJECT (back_button), "clicked", G_CALLBACK (go_back), b);
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (back_button), -1);
+	b->back_button = gtk_tool_button_new_from_stock (GTK_STOCK_GO_BACK);
+	gtk_widget_set_tooltip_text (GTK_WIDGET (b->back_button), "Go back to the previous page");
+	g_signal_connect (G_OBJECT (b->back_button), "clicked", G_CALLBACK (go_back), b);
+	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (b->back_button), -1);
 
 	/* The forward button */
-	forward_button = gtk_tool_button_new_from_stock (GTK_STOCK_GO_FORWARD);
-	gtk_widget_set_tooltip_text (GTK_WIDGET (forward_button), "Go to the next page");
-	g_signal_connect (G_OBJECT (forward_button), "clicked", G_CALLBACK (go_forward), b);
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (forward_button), -1);
+	b->forward_button = gtk_tool_button_new_from_stock (GTK_STOCK_GO_FORWARD);
+	gtk_widget_set_tooltip_text (GTK_WIDGET (b->forward_button), "Go to the next page");
+	g_signal_connect (G_OBJECT (b->forward_button), "clicked", G_CALLBACK (go_forward), b);
+	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (b->forward_button), -1);
 	
 	/* The refresh button */
-	refresh_button = gtk_tool_button_new_from_stock (GTK_STOCK_REFRESH);
-	gtk_widget_set_tooltip_text (GTK_WIDGET (refresh_button), "Reload the current page");
-	g_signal_connect (G_OBJECT (refresh_button), "clicked", G_CALLBACK (refresh), b);
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (refresh_button), -1);
+	b->refresh_button = gtk_tool_button_new_from_stock (GTK_STOCK_REFRESH);
+	gtk_widget_set_tooltip_text (GTK_WIDGET (b->refresh_button), "Reload the current page");
+	g_signal_connect (G_OBJECT (b->refresh_button), "clicked", G_CALLBACK (refresh), b);
+	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (b->refresh_button), -1);
 	
 	/* The cancel button
 	cancel_button = gtk_tool_button_new_from_stock (GTK_STOCK_CANCEL);
@@ -64,26 +64,26 @@ create_toolbar (Browser *b)
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 	
 	/* The home button */
-	home_button = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
-	gtk_widget_set_tooltip_text (GTK_WIDGET (home_button), "Go to home page");
-	g_signal_connect (G_OBJECT (home_button), "clicked", G_CALLBACK (go_home), b);
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), home_button, -1);
+	b->home_button = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
+	gtk_widget_set_tooltip_text (GTK_WIDGET (b->home_button), "Go to home page");
+	g_signal_connect (G_OBJECT (b->home_button), "clicked", G_CALLBACK (go_home), b);
+	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), b->home_button, -1);
 	
 	/* Set up accelerators (keyboard shortcuts)
-	gtk_widget_add_accelerator (GTK_WIDGET (back_button), "activate", accel_group, GDK_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE); */
+	gtk_widget_add_accelerator (GTK_WIDGET (b->back_button), "activate", accel_group, GDK_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE); */
 	
 	/* Set up right-click context menu */
 	g_signal_connect (GTK_OBJECT (toolbar), "button-press-event", G_CALLBACK (context_menu_popup), b);
 	
 	/* Show widgets */
-	gtk_widget_show (GTK_WIDGET (back_button));
-	gtk_widget_show (GTK_WIDGET (forward_button));
-	gtk_widget_show (GTK_WIDGET (refresh_button));
+	gtk_widget_show (GTK_WIDGET (b->back_button));
+	gtk_widget_show (GTK_WIDGET (b->forward_button));
+	gtk_widget_show (GTK_WIDGET (b->refresh_button));
 	gtk_widget_show (b->uri_entry);
 	gtk_widget_show (b->search_engine_entry);
 	gtk_widget_show (GTK_WIDGET (item));
 	gtk_widget_show (GTK_WIDGET (h_paned));
-	gtk_widget_show (GTK_WIDGET (home_button));
+	gtk_widget_show (GTK_WIDGET (b->home_button));
 
 	return toolbar;
 }

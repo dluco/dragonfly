@@ -13,7 +13,7 @@ activate_uri_entry (GtkWidget *entry, Browser *b)
 	if (temp[0] == '/')
 		uri = g_strdup_printf ("file://%s", temp);
 	else
-		uri = g_strrstr (temp, "://") ? g_strdup (temp) : g_strdup_printf ("http://%s", temp);
+		uri = g_strrstr (temp, "://") ? g_strdup (temp) : g_strdup_printf ("https://%s", temp);
 	
 	webkit_web_view_load_uri (b->webview, uri);
 }
@@ -118,7 +118,7 @@ go_home (GtkWidget *w, Browser *b)
  * Hide or show a widget based on its current visibility
  */
 void
-hide_item (GtkWidget *widget, gpointer data)
+toggle_widget (GtkWidget *widget, gpointer data)
 {
 	/*data = GTK_WIDGET (data) */
 	
@@ -218,6 +218,9 @@ load_status_change (WebKitWebView *view, GParamSpec *pspec, Browser *b)
 		default:
 			break;
 	}
+	/* Update toolbar buttons */
+	gtk_widget_set_sensitive (GTK_WIDGET (b->back_button), webkit_web_view_can_go_back (b->webview));
+	gtk_widget_set_sensitive (GTK_WIDGET (b->forward_button), webkit_web_view_can_go_forward (b->webview));
 }
 
 /*
@@ -384,8 +387,8 @@ view_context_menu_popup (GtkWidget *widget, GdkEventButton *event,  Browser *b)
 	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (hide_menu_bar_item), gtk_widget_get_visible (b->menubar));
 	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (hide_status_bar_item), gtk_widget_get_visible (GTK_WIDGET (b->status_bar)));
 	
-	g_signal_connect (hide_menu_bar_item, "activate", G_CALLBACK (hide_item), b->menubar);
-	g_signal_connect (hide_status_bar_item, "activate", G_CALLBACK (hide_item), b->status_bar);
+	g_signal_connect (hide_menu_bar_item, "activate", G_CALLBACK (toggle_widget), b->menubar);
+	g_signal_connect (hide_status_bar_item, "activate", G_CALLBACK (toggle_widget), b->status_bar);
 	
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), hide_menu_bar_item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), hide_status_bar_item);
@@ -412,6 +415,7 @@ view_source (GtkWidget *w, Browser *b)
 void
 zoom_in (GtkWidget *widget, Browser *b)
 {
+	b->zoomed = TRUE;
 	webkit_web_view_zoom_in (b->webview);
 }
 
@@ -421,6 +425,7 @@ zoom_in (GtkWidget *widget, Browser *b)
 void
 zoom_out (GtkWidget *widget, Browser *b)
 {
+	b->zoomed = TRUE;
 	webkit_web_view_zoom_out (b->webview);
 }
 
@@ -430,5 +435,6 @@ zoom_out (GtkWidget *widget, Browser *b)
 void
 zoom_reset (GtkWidget *widget, Browser *b)
 {
+	b->zoomed = FALSE;
 	webkit_web_view_set_zoom_level (b->webview, 1.0);
 }

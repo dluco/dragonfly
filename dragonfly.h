@@ -10,12 +10,11 @@
 typedef struct Browser {
 	GtkWidget *window;
 	GtkWidget *vbox, *menubar, *toolbar, *pane, *scrolled_window;
-	GtkWidget *uri_entry;
-	GtkWidget *search_engine_entry;
+	GtkWidget *uri_entry, *search_engine_entry;
+	GtkToolItem *back_button, *forward_button, *refresh_button, *home_button;
 	GtkStatusbar *status_bar;
 	WebKitWebView *webview;
 	WebKitWebInspector *inspector;
-	//GtkAccelGroup *accel_group;
 	gint progress;
 	guint status_context_id;
 	char *title;
@@ -24,7 +23,6 @@ typedef struct Browser {
 } Browser;
 
 extern Browser *browsers;
-//extern char *download_dir;
 
 #include "about.h"
 #include "callback.h"

@@ -30,7 +30,7 @@ main (int argc, char *argv[])
 		
 	if (argc > 1)
 		if (argv[1][1] == 'v') {
-			printf ("surf-"VERSION", 2014 David Luco\n");
+			printf ("Dragonfly-"VERSION", 2014 David Luco\n");
 			return 0;
 		}
 	
