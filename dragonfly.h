@@ -2,7 +2,6 @@
 #define _DRAGONFLY_H
 
 #include <gtk/gtk.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <webkit/webkit.h>

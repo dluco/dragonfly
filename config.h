@@ -5,6 +5,8 @@
 #define HOME_PAGE "https://duckduckgo.com/"
 
 #define COOKIE_FILE "cookies.txt"
+#define STYLE_FILE "style.css"
+#define CA_FILE "/etc/ssl/certs/ca-certificates.crt"
 #define DOWNLOAD_DIR "~/Downloads/"
 /* 
  * use:
@@ -19,6 +21,7 @@
 #define ENABLE_PLUGINS TRUE
 #define ENABLE_SCRIPTS TRUE
 #define ENABLE_FILE_ACCESS TRUE
+#define STRICT_SSL FALSE
 #define ENABLE_INSPECTOR TRUE
 #define LOAD_IMAGES TRUE
 #define ENALBE_SPELL_CHECKING TRUE

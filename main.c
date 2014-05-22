@@ -2,6 +2,7 @@
 
 Browser *browsers = NULL;
 char *cookiefile;
+char *stylefile;
 char *download_dir;
 
 /*
@@ -12,6 +13,8 @@ cleanup (void)
 {
 	while(browsers)
 		destroy_browser (browsers);
+	g_free (cookiefile);
+	g_free (stylefile);
 	g_free (download_dir);
 }
 
@@ -22,6 +25,7 @@ setup (void)
 	
 	/* dirs and files */
 	cookiefile = buildpath (COOKIE_FILE);
+	stylefile = buildpath (STYLE_FILE);
 	download_dir = buildpath (DOWNLOAD_DIR);
 	
 	/* request handler */
@@ -29,6 +33,10 @@ setup (void)
 	
 	/* cookie jar */
 	soup_session_add_feature (s, SOUP_SESSION_FEATURE (cookiejar_new (cookiefile, FALSE)));
+	
+	/* ssl */
+	g_object_set (G_OBJECT (s), "ssl-ca-file", CA_FILE, NULL);
+	g_object_set (G_OBJECT (s), "ssl-strict", STRICT_SSL, NULL);
 }
 
 int
@@ -53,5 +61,5 @@ main (int argc, char *argv[])
 	gtk_main ();
 	cleanup ();
 	
-	return EXIT_SUCCESS;
+	return 0;
 }
