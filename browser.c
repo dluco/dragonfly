@@ -1,7 +1,28 @@
 #include "dragonfly.h"
 
-static void
-browser_settings (Browser *b)
+SearchEngine *
+browser_get_default_search_engine (Browser *b)
+{
+	SearchEngine *engine;
+	
+	if (!(engine = malloc (sizeof (SearchEngine)))) {
+		fprintf (stderr, "Error: Failed to allocate memory\n");
+	}
+	
+	engine->name = "Duck Duck Go";
+	engine->url = "https://duckduckgo.com/?q=";
+	
+	return engine;
+}
+
+void
+browser_set_default_search_engine (Browser *b, SearchEngine *engine)
+{
+	b->engine = engine;
+}
+
+void
+browser_set_settings (Browser *b)
 {
 	WebKitWebSettings *settings;
 	
@@ -45,7 +66,7 @@ browser_settings (Browser *b)
  * webinspector is called, which occupies the lower pane.
  */
 Browser *
-create_browser ()
+browser_new ()
 {
 	Browser *b;
 	
@@ -106,7 +127,7 @@ create_browser ()
 		"title-changed",
 		G_CALLBACK(title_change), b);
 	
-	browser_settings (b);
+	browser_set_settings (b);
 	
 	/* Statusbar */
 	b->status_bar = GTK_STATUSBAR (gtk_statusbar_new ());
@@ -137,6 +158,9 @@ create_browser ()
 	b->title = NULL;
 	b->next = browsers;
 	browsers = b;
+	
+	/* Search Engine */
+	b->engine = browser_get_default_search_engine (b);
 	
 	gtk_widget_show (b->window);
 	

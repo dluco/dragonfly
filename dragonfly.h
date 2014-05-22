@@ -7,6 +7,11 @@
 #include <stdio.h>
 #include <webkit/webkit.h>
 
+typedef struct SearchEngine {
+	char *name;
+	char *url;
+} SearchEngine;
+
 typedef struct Browser {
 	GtkWidget *window;
 	GtkWidget *vbox, *menubar, *toolbar, *pane, *scrolled_window;
@@ -18,6 +23,7 @@ typedef struct Browser {
 	gint progress;
 	guint status_context_id;
 	char *title;
+	SearchEngine *engine;
 	gboolean fullscreen, isinspecting, zoomed;
 	struct Browser *next;
 } Browser;

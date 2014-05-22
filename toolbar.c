@@ -1,13 +1,23 @@
 #include "dragonfly.h"
 
+#include <string.h>
+
+gboolean
+search_engine_entry_set_placeholder_text (GtkWidget *entry, GdkEvent *event, Browser *b)
+{
+	if (gtk_widget_has_focus (entry) && strcmp(gtk_entry_get_text (GTK_ENTRY (entry)), "Search...") == 0) {
+		gtk_entry_set_text (GTK_ENTRY (entry), "");
+	} else if (!gtk_widget_has_focus (entry)) {
+		if (gtk_entry_get_text_length (GTK_ENTRY (entry)) == 0)
+			gtk_entry_set_text (GTK_ENTRY (entry), "Search...");
+	}
+	return FALSE;
+}
+
 GtkWidget*
 create_toolbar (Browser *b)
 {
 	GtkWidget *toolbar;
-	//GtkToolItem *b->back_button;
-	//GtkToolItem *b->forward_button;
-	//GtkToolItem *b->refresh_button;
-	//GtkToolItem *b->home_button;
 	GtkToolItem *item;
 	GtkWidget *h_paned;
 	
@@ -42,16 +52,20 @@ create_toolbar (Browser *b)
 	
 	/* The URL entry */
 	b->uri_entry = gtk_entry_new ();
+	gtk_widget_set_tooltip_text (GTK_WIDGET (b->uri_entry), "Load a url");
 	g_signal_connect (G_OBJECT (b->uri_entry), "activate", G_CALLBACK (activate_uri_entry), b);
 	
 	/* The search-engine entry */
 	b->search_engine_entry = gtk_entry_new ();
 	gtk_entry_set_icon_from_stock (GTK_ENTRY (b->search_engine_entry), GTK_ENTRY_ICON_PRIMARY, GTK_STOCK_FILE);
 	gtk_entry_set_icon_from_stock (GTK_ENTRY (b->search_engine_entry), GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_FIND);
-	gtk_entry_set_icon_tooltip_text (GTK_ENTRY (b->search_engine_entry), GTK_ENTRY_ICON_PRIMARY, "Choose Search Engine");
+	gtk_widget_set_tooltip_text (GTK_WIDGET (b->search_engine_entry), "Run a web search");
+	gtk_entry_set_icon_tooltip_text (GTK_ENTRY (b->search_engine_entry), GTK_ENTRY_ICON_PRIMARY, "Choose search engine");
 	gtk_entry_set_icon_tooltip_text (GTK_ENTRY (b->search_engine_entry), GTK_ENTRY_ICON_SECONDARY, "Search");
-	//g_signal_connect (G_OBJECT (b->search_engine_entry), "activate", G_CALLBACK (activate_search_engine_entry_cb), NULL);
-	//g_signal_connect (G_OBJECT (b->search_engine_entry), "icon-press", G_CALLBACK (search_engine_entry_icon_cb), NULL);
+	g_signal_connect (G_OBJECT (b->search_engine_entry), "activate", G_CALLBACK (activate_search_engine_entry), b);
+	g_signal_connect (G_OBJECT (b->search_engine_entry), "icon-press", G_CALLBACK (activate_search_engine_entry_icon), b);
+	//g_signal_connect (G_OBJECT (b->search_engine_entry), "focus-in-event", G_CALLBACK (search_engine_entry_set_placeholder_text), b);
+	//g_signal_connect (G_OBJECT (b->search_engine_entry), "focus-out-event", G_CALLBACK (search_engine_entry_set_placeholder_text), b);
 
 	/* Paned widget to hold uri entry and search-engine entry */
 	h_paned = gtk_hpaned_new ();
@@ -70,7 +84,7 @@ create_toolbar (Browser *b)
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), b->home_button, -1);
 	
 	/* Set up accelerators (keyboard shortcuts)
-	gtk_widget_add_accelerator (GTK_WIDGET (b->back_button), "activate", accel_group, GDK_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE); */
+	gtk_widget_add_accelerator (GTK_WIDGET (b->back_button), "activate", accel_group, GDK_k, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE); */
 	
 	/* Set up right-click context menu */
 	g_signal_connect (GTK_OBJECT (toolbar), "button-press-event", G_CALLBACK (context_menu_popup), b);

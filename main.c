@@ -34,7 +34,7 @@ main (int argc, char *argv[])
 			return 0;
 		}
 	
-	Browser *b = create_browser ();
+	Browser *b = browser_new ();
 	gtk_window_set_title (GTK_WINDOW (b->window), "Dragonfly");
 	
 	gchar* uri = (gchar*) (argc > 1 ? argv[1] : HOME_PAGE);

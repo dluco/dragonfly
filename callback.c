@@ -1,5 +1,27 @@
 #include "dragonfly.h"
 
+void
+activate_search_engine_entry (GtkWidget* entry, Browser *b)
+{
+	const gchar *uri = g_strconcat (b->engine->url, gtk_entry_get_text (GTK_ENTRY (b->search_engine_entry)), NULL);
+	g_assert (uri);
+	webkit_web_view_load_uri (b->webview, uri);
+}
+
+void
+activate_search_engine_entry_icon (GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, Browser *b)
+{
+	switch (icon_pos)
+	{
+		case GTK_ENTRY_ICON_PRIMARY:
+			view_search_engine_menu_popup (GTK_WIDGET (entry), event, b);
+			break;
+		case GTK_ENTRY_ICON_SECONDARY:
+			activate_search_engine_entry (GTK_WIDGET (entry), b);
+			break;
+	}
+}
+
 /*
  * Activation of the url-bar - open web page in web-view
  */
@@ -40,7 +62,7 @@ context_menu_popup (GtkWidget *widget, GdkEventButton *event, Browser *b)
 WebKitWebView *
 create_window (WebKitWebView  *v, WebKitWebFrame *f, Browser *b)
 {
-	Browser *n = create_browser ();
+	Browser *n = browser_new ();
 	return n->webview;
 }
 
@@ -397,6 +419,34 @@ view_context_menu_popup (GtkWidget *widget, GdkEventButton *event,  Browser *b)
 	
 	/* Trigger the popup menu to appear */
 	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, (event != NULL) ? event->button : 0, gdk_event_get_time ((GdkEvent*)event));
+}
+
+void
+view_search_engine_menu_popup (GtkWidget *widget, GdkEvent *event,  Browser *b)
+{
+	GtkWidget *menu;
+	GtkWidget *duck_duck;
+	GtkWidget *google;
+	
+	menu = gtk_menu_new ();
+
+	duck_duck = gtk_check_menu_item_new_with_label ("Duck Duck Go");
+	google = gtk_check_menu_item_new_with_label ("Google");
+	
+	/* Set initial state of toggle to show if menubar is visible */
+	//gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (hide_menu_bar_item), gtk_widget_get_visible (b->menubar));
+	//gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (hide_status_bar_item), gtk_widget_get_visible (GTK_WIDGET (b->status_bar)));
+	
+	//g_signal_connect (duck_duck, "activate", G_CALLBACK (toggle_widget), b->menubar);
+	//g_signal_connect (google, "activate", G_CALLBACK (toggle_widget), b->status_bar);
+	
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), duck_duck);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), google);
+	
+	gtk_widget_show_all (menu);
+	
+	/* Trigger the popup menu to appear */
+	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 0, gdk_event_get_time (event));
 }
 
 void
