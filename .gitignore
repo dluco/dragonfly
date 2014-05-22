@@ -6,3 +6,6 @@ dragonfly
 
 # Ignore log files
 log
+
+#Ignore cookie file
+cookies.txt

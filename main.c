@@ -1,6 +1,7 @@
 #include "dragonfly.h"
 
 Browser *browsers = NULL;
+char *cookiefile;
 char *download_dir;
 
 /*
@@ -16,9 +17,18 @@ cleanup (void)
 
 static void
 setup (void)
-{	
-	// dirs and files
+{
+	SoupSession *s;
+	
+	/* dirs and files */
+	cookiefile = buildpath (COOKIE_FILE);
 	download_dir = buildpath (DOWNLOAD_DIR);
+	
+	/* request handler */
+	s = webkit_get_default_session ();
+	
+	/* cookie jar */
+	soup_session_add_feature (s, SOUP_SESSION_FEATURE (cookiejar_new (cookiefile, FALSE)));
 }
 
 int

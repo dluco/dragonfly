@@ -4,6 +4,7 @@
 
 #define HOME_PAGE "https://duckduckgo.com/"
 
+#define COOKIE_FILE "cookies.txt"
 #define DOWNLOAD_DIR "~/Downloads/"
 /* 
  * use:

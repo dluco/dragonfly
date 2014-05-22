@@ -1,23 +1,15 @@
-[Duck Duck Go]
-name=Duck Duck Go
-text=Privacy-aware Web Search
-uri=https://duckduckgo.com/?q=%s
-token=dd
+Duck Duck Go
+Privacy-aware Web Search
+https://duckduckgo.com/?q=%s
 
-[Google]
-name=Google
-text=Web Search
-uri=http://www.google.com/search?q=%s
-token=g
+Google
+Web Search
+http://www.google.com/search?q=%s
 
-[Wikipedia]
-name=Wikipedia
-text=The free encyclopedia
-uri=http://en.wikipedia.org/wiki/Special:Search/%s
-token=wp
+Wikipedia
+The free encyclopedia
+http://en.wikipedia.org/wiki/Special:Search/%s
 
-[Yahoo]
-name=Yahoo
-text=Yahoo Web Search
-uri=http://search.yahoo.com/search?p=
-token=y
+Yahoo
+Yahoo Web Search
+http://search.yahoo.com/search?p=

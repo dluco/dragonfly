@@ -29,9 +29,11 @@ typedef struct Browser {
 } Browser;
 
 extern Browser *browsers;
+extern char *cookiefile;
 
 #include "about.h"
 #include "callback.h"
+#include "cookie.h"
 #include "browser.h"
 #include "dialog.h"
 #include "download.h"
