@@ -32,7 +32,7 @@ void refresh (GtkWidget* w, Browser *b);
 void title_change(WebKitWebView *view, WebKitWebFrame *frame, const char *title, Browser *b);
 void update_browser (Browser *b);
 void view_context_menu_popup (GtkWidget *widget, GdkEventButton *event,  Browser *b);
-void view_search_engine_menu_popup (GtkWidget *widget, GdkEvent *event,  Browser *b);
+void view_search_engine_menu (GtkWidget *widget,  Browser *b);
 void view_source (GtkWidget *w, Browser *b);
 void zoom_in (GtkWidget* widget, Browser *b);
 void zoom_out (GtkWidget* widget, Browser *b);

@@ -1,19 +1,5 @@
 #include "dragonfly.h"
 
-#include <string.h>
-
-gboolean
-search_engine_entry_set_placeholder_text (GtkWidget *entry, GdkEvent *event, Browser *b)
-{
-	if (gtk_widget_has_focus (entry) && strcmp(gtk_entry_get_text (GTK_ENTRY (entry)), "Search...") == 0) {
-		gtk_entry_set_text (GTK_ENTRY (entry), "");
-	} else if (!gtk_widget_has_focus (entry)) {
-		if (gtk_entry_get_text_length (GTK_ENTRY (entry)) == 0)
-			gtk_entry_set_text (GTK_ENTRY (entry), "Search...");
-	}
-	return FALSE;
-}
-
 GtkWidget*
 create_toolbar (Browser *b)
 {
@@ -64,8 +50,6 @@ create_toolbar (Browser *b)
 	gtk_entry_set_icon_tooltip_text (GTK_ENTRY (b->search_engine_entry), GTK_ENTRY_ICON_SECONDARY, "Search");
 	g_signal_connect (G_OBJECT (b->search_engine_entry), "activate", G_CALLBACK (activate_search_engine_entry), b);
 	g_signal_connect (G_OBJECT (b->search_engine_entry), "icon-press", G_CALLBACK (activate_search_engine_entry_icon), b);
-	//g_signal_connect (G_OBJECT (b->search_engine_entry), "focus-in-event", G_CALLBACK (search_engine_entry_set_placeholder_text), b);
-	//g_signal_connect (G_OBJECT (b->search_engine_entry), "focus-out-event", G_CALLBACK (search_engine_entry_set_placeholder_text), b);
 
 	/* Paned widget to hold uri entry and search-engine entry */
 	h_paned = gtk_hpaned_new ();

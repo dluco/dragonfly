@@ -14,7 +14,7 @@ activate_search_engine_entry_icon (GtkEntry *entry, GtkEntryIconPosition icon_po
 	switch (icon_pos)
 	{
 		case GTK_ENTRY_ICON_PRIMARY:
-			view_search_engine_menu_popup (GTK_WIDGET (entry), event, b);
+			view_search_engine_menu (GTK_WIDGET (entry), b);
 			break;
 		case GTK_ENTRY_ICON_SECONDARY:
 			activate_search_engine_entry (GTK_WIDGET (entry), b);
@@ -362,6 +362,26 @@ refresh (GtkWidget* w, Browser *b)
 	webkit_web_view_reload (b->webview);
 }
 
+static void
+search_engine_menu_popup_position_menu (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, GtkWidget *widget)
+{
+	gdk_window_get_origin (widget->window, x, y);
+	//*x += widget->allocation.x;
+	*y += widget->allocation.y + 1;
+}
+
+static void
+menu_dropdown (GtkMenu *menu, GtkWidget *widget)
+{
+	GtkRequisition requisition;
+	
+	gtk_widget_get_requisition (widget, &requisition);
+	if (widget->allocation.width > requisition.width)
+		gtk_widget_set_size_request (widget, widget->allocation.width, -1);
+	
+	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, (GtkMenuPositionFunc) search_engine_menu_popup_position_menu, widget, 0, gtk_get_current_event_time ());
+}
+
 void
 title_change (WebKitWebView *view, WebKitWebFrame *frame, const char *t, Browser *b)
 {
@@ -422,7 +442,7 @@ view_context_menu_popup (GtkWidget *widget, GdkEventButton *event,  Browser *b)
 }
 
 void
-view_search_engine_menu_popup (GtkWidget *widget, GdkEvent *event,  Browser *b)
+view_search_engine_menu (GtkWidget *widget,  Browser *b)
 {
 	GtkWidget *menu;
 	GtkWidget *duck_duck;
@@ -445,8 +465,16 @@ view_search_engine_menu_popup (GtkWidget *widget, GdkEvent *event,  Browser *b)
 	
 	gtk_widget_show_all (menu);
 	
-	/* Trigger the popup menu to appear */
-	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 0, gdk_event_get_time (event));
+	/* Trigger the popup menu to appear
+	 * 
+	 * Look into GtkMenuPositionFunc() to better position the menu
+	 * 
+	 */
+	//if (!gtk_menu_get_attach_widget (GTK_MENU (menu)))
+		//gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (widget), NULL);
+	
+	//gtk_menu_popup (GTK_MENU (menu), NULL, NULL, (GtkMenuPositionFunc) search_engine_menu_popup_position_menu, widget, 0, gdk_event_get_time (event));
+	menu_dropdown (GTK_MENU (menu), GTK_WIDGET (widget));
 }
 
 void
