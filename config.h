@@ -1,4 +1,4 @@
-#define useragent "Mozilla/5.0 (X11; U; Unix; en-US) " \
+#define USER_AGENT "Mozilla/5.0 (X11; U; Unix; en-US) " \
 	"AppleWebKit/537.15 (KHTML, like Gecko) Chrome/24.0.1295.0 " \
 	"Safari/537.15"
 
@@ -24,6 +24,6 @@
 #define STRICT_SSL FALSE
 #define ENABLE_INSPECTOR TRUE
 #define LOAD_IMAGES TRUE
-#define ENALBE_SPELL_CHECKING TRUE
+#define ENABLE_SPELL_CHECKING TRUE
 #define HIDE_BACKGROUND  FALSE
 #define FULL_CONTENT_ZOOM TRUE

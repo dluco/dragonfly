@@ -43,4 +43,6 @@ extern char *cookiefile;
 
 #include "config.h"
 
+#define BUFSIZE 1024
+
 #endif /* _DRAGONFLY_H */

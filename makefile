@@ -1,7 +1,9 @@
 VERSION=0.3
 
+PACKAGE=dragonfly
+
 CC=gcc
-CFLAGS=-g -Wall $(shell pkg-config --cflags gtk+-2.0 webkit-1.0) -DVERSION=\"${VERSION}\"
+CFLAGS=-g -Wall $(shell pkg-config --cflags gtk+-2.0 webkit-1.0) -DVERSION=\"${VERSION}\" -DPACKAGE=\"${PACKAGE}\"
 LDFLAGS+=$(shell pkg-config --libs gtk+-2.0 webkit-1.0)
 
 OBJ=about.o browser.o callback.o cookie.o dialog.o download.o main.o menu.o search.o toolbar.o utils.o

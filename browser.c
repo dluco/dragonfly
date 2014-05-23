@@ -29,12 +29,12 @@ browser_set_settings (Browser *b)
 	settings = webkit_web_view_get_settings (b->webview);
 	
 	/* Apply default settings from config.h */
-	g_object_set (G_OBJECT (settings), "user-agent", useragent, NULL);
+	g_object_set (G_OBJECT (settings), "user-agent", USER_AGENT, NULL);
 	g_object_set (G_OBJECT (settings), "auto-load-images", LOAD_IMAGES, NULL);
 	g_object_set (G_OBJECT (settings), "enable-plugins", ENABLE_PLUGINS, NULL);
 	g_object_set (G_OBJECT (settings), "enable-scripts", ENABLE_SCRIPTS, NULL);
 	g_object_set (G_OBJECT (settings), "enable-spatial-navigation", ENABLE_SPATIAL_BROWSING, NULL);
-	g_object_set (G_OBJECT (settings), "enable-spell-checking", ENALBE_SPELL_CHECKING, NULL);
+	g_object_set (G_OBJECT (settings), "enable-spell-checking", ENABLE_SPELL_CHECKING, NULL);
 	g_object_set (G_OBJECT (settings), "enable-file-access-from-file-uris", ENABLE_FILE_ACCESS, NULL);
 	g_object_set (G_OBJECT (settings), "enable-developer-extras", ENABLE_INSPECTOR, NULL);
 	
