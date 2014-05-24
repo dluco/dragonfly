@@ -1,5 +1,7 @@
 #include "dragonfly.h"
 
+#include <getopt.h>
+
 typedef struct {
 	gchar *useragent;
 	gchar *homepage;
@@ -81,6 +83,38 @@ load_config_file(Conf *conf)
 }
 
 static void
+parse_args (int argc, char **argv)
+{
+	int option_index = 0;
+	int index;
+	
+	struct option long_options[] = {
+		{"help", no_argument, 0, 'h'},
+		{"useragent", required_argument, 0, 'u'},
+		{"version", no_argument, 0, 'v'},
+		{0, 0, 0, 0}
+	};
+	
+	while ((index = getopt_long (argc, argv, "hu:v", long_options, &option_index)) != -1) {
+		switch (index) {
+			case 'h':
+				printf ("help!\n");
+				exit (0);
+			case 'u':
+				if (optarg)
+					printf ("%s\n", optarg);
+				break;
+			case 'v':
+				printf ("%s\n", PACKAGE"-"VERSION);
+				exit (0);
+			default:
+				printf ("%s\n", "chicken");
+				break;
+		}
+	}
+}
+
+static void
 save_config_file(Conf *conf)
 {
 	FILE *fp;
@@ -142,8 +176,9 @@ main (int argc, char *argv[])
 	Conf *conf;
 	Browser *b;
 	
-	//parse_args ();
 	gtk_init (&argc, &argv);
+	parse_args (argc, argv);
+	
 	g_set_application_name("Dragonfly");
 	
 	setup ();
@@ -166,17 +201,12 @@ main (int argc, char *argv[])
 	
 	load_config_file (conf);
 	save_config_file (conf);
-		
-	if (argc > 1)
-		if (argv[1][1] == 'v') {
-			printf ("Dragonfly-"VERSION", 2014 David Luco\n");
-			return 0;
-		}
 	
 	b = browser_new ();
 	gtk_window_set_title (GTK_WINDOW (b->window), "Dragonfly");
 	
-	gchar* uri = (gchar*) (argc > 1 ? argv[1] : HOME_PAGE);
+	//gchar* uri = (gchar*) (argc > 1 ? argv[1] : HOME_PAGE);
+	gchar *uri = (gchar*) HOME_PAGE;
 	webkit_web_view_load_uri (b->webview, uri);
 	
 	gtk_main ();
