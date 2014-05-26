@@ -179,7 +179,7 @@ main (int argc, char *argv[])
 	gtk_init (&argc, &argv);
 	parse_args (argc, argv);
 	
-	g_set_application_name("Dragonfly");
+	g_set_application_name ("Dragonfly");
 	
 	setup ();
 	
