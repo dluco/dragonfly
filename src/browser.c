@@ -5,12 +5,14 @@ browser_get_default_search_engine (Browser *b)
 {
 	SearchEngine *engine;
 	
-	if (!(engine = malloc (sizeof (SearchEngine)))) {
+	if (!(engine = (SearchEngine*) malloc (sizeof (SearchEngine)))) {
 		fprintf (stderr, "Error: Failed to allocate memory\n");
 	}
 	
 	engine->name = "Duck Duck Go";
+	engine->text = "Search engine!";
 	engine->url = "https://duckduckgo.com/?q=";
+	engine->next = NULL;
 	
 	return engine;
 }

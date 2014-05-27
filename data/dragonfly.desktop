@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=0.3
+Name=Dragonfly
+GenericName=Web Browser
+Comment=Access the Internet
+Exec=dragonfly %U
+Terminal=false
+#Icon=chromium
+Type=Application
+Categories=GTK;Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;text/mml;x-scheme-handler/http;x-scheme-handler/https;

@@ -6,6 +6,7 @@
 
 #define COOKIE_FILE "cookies.txt"
 #define STYLE_FILE "style.css"
+#define ENGINE_FILE "engines"
 #define CA_FILE "/etc/ssl/certs/ca-certificates.crt"
 #define DOWNLOAD_DIR "~/Downloads/"
 /* 

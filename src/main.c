@@ -19,9 +19,11 @@ typedef struct {
 } Conf;
 
 Browser *browsers = NULL;
+SearchEngine *engine_list = NULL;
 char *cookiefile;
 char *stylefile;
 char *download_dir;
+char *enginefile;
 
 /*
  * Destroy all browser instances
@@ -34,6 +36,7 @@ cleanup (void)
 	g_free (cookiefile);
 	g_free (stylefile);
 	g_free (download_dir);
+	g_free (enginefile);
 }
 
 /*
@@ -254,6 +257,7 @@ setup (void)
 	cookiefile = buildpath (COOKIE_FILE);
 	stylefile = buildpath (STYLE_FILE);
 	download_dir = buildpath (DOWNLOAD_DIR);
+	enginefile = buildpath (ENGINE_FILE);
 	
 	/* request handler */
 	s = webkit_get_default_session ();
@@ -264,6 +268,9 @@ setup (void)
 	/* ssl */
 	g_object_set (G_OBJECT (s), "ssl-ca-file", CA_FILE, NULL);
 	g_object_set (G_OBJECT (s), "ssl-strict", STRICT_SSL, NULL);
+	
+	/* search engines */
+	engine_list = load_engines (enginefile);
 }
 
 int

@@ -8,7 +8,9 @@
 
 typedef struct SearchEngine {
 	char *name;
+	char *text;
 	char *url;
+	struct SearchEngine *next;
 } SearchEngine;
 
 typedef struct Browser {

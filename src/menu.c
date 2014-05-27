@@ -2,7 +2,7 @@
 
 #include <gdk/gdkkeysyms.h>
 
-GtkWidget*
+GtkWidget *
 create_menubar (Browser *b)
 {
 	GtkWidget *menubar;
@@ -226,4 +226,19 @@ create_menubar (Browser *b)
 	//gtk_widget_show (menubar);
 	
 	return (GtkWidget*)menubar;
+}
+
+GtkWidget *
+create_engine_menu (SearchEngine *engine_list, Browser *b)
+{
+	GtkWidget *menu;
+	int length;
+	
+	menu = gtk_menu_new ();
+	
+	length = (sizeof (engine_list)) / (sizeof (SearchEngine));
+	
+	printf ("length = %d\n", length);
+	
+	return (GtkWidget *) menu;
 }
