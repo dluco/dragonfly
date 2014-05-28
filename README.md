@@ -34,5 +34,5 @@ License
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 	SOFTWARE.
 
-	[1]: https://github.com/dluco/dragonfly/blob/master/data/preview.png
+  [1]: https://github.com/dluco/dragonfly/blob/master/data/preview.png
 
