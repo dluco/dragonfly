@@ -3,8 +3,6 @@ Dragonfly
 
 Dragonfly is a web browser built with webkitgtk. It is designed to be fast and simple to use, and is inspired by projects such as surf, midori, and leafpad.
 
-![image alt][1]
-
 Dependencies
 ------------
 
@@ -33,6 +31,3 @@ License
 	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 	SOFTWARE.
-
-  [1]: https://github.com/dluco/dragonfly/blob/master/data/preview.png
-
