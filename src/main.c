@@ -249,28 +249,27 @@ save_config_file (Conf *conf)
 }
 
 static void
-setup (void)
+setup(void)
 {
 	SoupSession *s;
 	
 	/* dirs and files */
-	cookiefile = buildpath (COOKIE_FILE);
-	stylefile = buildpath (STYLE_FILE);
-	download_dir = buildpath (DOWNLOAD_DIR);
-	enginefile = buildpath (ENGINE_FILE);
+	cookiefile = buildpath(COOKIE_FILE);
+	stylefile = buildpath(STYLE_FILE);
+	download_dir = buildpath(DOWNLOAD_DIR);
 	
 	/* request handler */
-	s = webkit_get_default_session ();
+	s = webkit_get_default_session();
 	
 	/* cookie jar */
-	soup_session_add_feature (s, SOUP_SESSION_FEATURE (cookiejar_new (cookiefile, FALSE)));
+	soup_session_add_feature(s, SOUP_SESSION_FEATURE(cookiejar_new(cookiefile, FALSE)));
 	
 	/* ssl */
-	g_object_set (G_OBJECT (s), "ssl-ca-file", CA_FILE, NULL);
-	g_object_set (G_OBJECT (s), "ssl-strict", STRICT_SSL, NULL);
+	g_object_set(G_OBJECT(s), "ssl-ca-file", CA_FILE, NULL);
+	g_object_set(G_OBJECT(s), "ssl-strict", STRICT_SSL, NULL);
 	
 	/* search engines */
-	engine_list = load_engines (enginefile);
+	load_engines();
 }
 
 int
@@ -279,12 +278,12 @@ main (int argc, char *argv[])
 	Conf *conf;
 	Browser *b;
 	
-	gtk_init (&argc, &argv);
-	parse_args (argc, argv);
+	gtk_init(&argc, &argv);
+	parse_args(argc, argv);
 	
-	g_set_application_name ("Dragonfly");
+	g_set_application_name("Dragonfly");
 	
-	setup ();
+	setup();
 	
 	conf = g_malloc (sizeof (Conf));
 	
@@ -312,8 +311,8 @@ main (int argc, char *argv[])
 	gchar *uri = (gchar*) HOME_PAGE;
 	webkit_web_view_load_uri (b->webview, uri);
 	
-	gtk_main ();
-	cleanup ();
+	gtk_main();
+	cleanup();
 	
 	return 0;
 }

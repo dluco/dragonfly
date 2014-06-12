@@ -2,6 +2,6 @@
 #define _UTILS_H
 
 char *buildpath(const char *path);
-SearchEngine *load_engines (const gchar *enginefile);
+void load_engines(void);
 
 #endif /* _UTILS_H */

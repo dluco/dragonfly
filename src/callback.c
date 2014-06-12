@@ -1,23 +1,26 @@
 #include "dragonfly.h"
+#include <string.h>
+
+/* Static function prototypes */
+static void menu_dropdown(GtkMenu *menu, GtkWidget *widget);
 
 void
-activate_search_engine_entry (GtkWidget* entry, Browser *b)
+activate_search_engine_entry(GtkWidget* entry, Browser *b)
 {
-	const gchar *uri = g_strconcat (b->engine->url, gtk_entry_get_text (GTK_ENTRY (b->search_engine_entry)), NULL);
-	g_assert (uri);
-	webkit_web_view_load_uri (b->webview, uri);
+	const gchar *uri = g_strdup_printf(b->engine->url, gtk_entry_get_text(GTK_ENTRY(b->search_engine_entry)));
+	g_assert(uri);
+	webkit_web_view_load_uri(b->webview, uri);
 }
 
 void
-activate_search_engine_entry_icon (GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, Browser *b)
+activate_search_engine_entry_icon(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, Browser *b)
 {
-	switch (icon_pos)
-	{
+	switch (icon_pos) {
 		case GTK_ENTRY_ICON_PRIMARY:
-			view_search_engine_menu (GTK_WIDGET (entry), b);
+			menu_dropdown(GTK_MENU(b->engine_menu), GTK_WIDGET(entry));
 			break;
 		case GTK_ENTRY_ICON_SECONDARY:
-			activate_search_engine_entry (GTK_WIDGET (entry), b);
+			activate_search_engine_entry(GTK_WIDGET (entry), b);
 			break;
 	}
 }
@@ -191,9 +194,9 @@ inspector_close (WebKitWebInspector *i, Browser *b)
 }
 
 void
-inspector_finished (WebKitWebInspector *i, Browser *b)
+inspector_finished(WebKitWebInspector *i, Browser *b)
 {
-	g_free (b->inspector);
+	g_free(b->inspector);
 }
 
 void
@@ -307,9 +310,7 @@ on_file_open (GtkWidget *w, Browser *b)
 	GtkWidget* file_dialog;
 	GtkFileFilter* filter;
 	gchar *filename;
-	
-	/*Browser *b = data;*/
-	
+		
 	file_dialog = gtk_file_chooser_dialog_new ("Open File", GTK_WINDOW (b->window), GTK_FILE_CHOOSER_ACTION_OPEN, "Cancel", GTK_RESPONSE_CANCEL, "Open", GTK_RESPONSE_ACCEPT, NULL);
 	
 	/* Add filters to dialog - all and html files */
@@ -338,7 +339,6 @@ on_file_open (GtkWidget *w, Browser *b)
 void
 on_file_print (GtkWidget *w, Browser *b)
 {
-	/*Browser *b = data;*/
 	webkit_web_frame_print (webkit_web_view_get_main_frame (b->webview));
 }
 
@@ -380,6 +380,24 @@ menu_dropdown (GtkMenu *menu, GtkWidget *widget)
 		gtk_widget_set_size_request (widget, widget->allocation.width, -1);
 	
 	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, (GtkMenuPositionFunc) search_engine_menu_popup_position_menu, widget, 0, gtk_get_current_event_time ());
+}
+
+void
+set_search_engine(GtkWidget *w, Browser *b)
+{
+	const gchar *name;
+	SearchEngine *s;
+	
+	name = gtk_menu_item_get_label(GTK_MENU_ITEM(w));
+	
+	s = engine_list;
+	while (s) {
+		if (strncmp(name, s->name, strlen(name)) == 0) {
+			browser_set_default_search_engine(b, s);
+			break;
+		}
+		s = s->next;
+	}
 }
 
 void
@@ -439,42 +457,6 @@ view_context_menu_popup (GtkWidget *widget, GdkEventButton *event,  Browser *b)
 	
 	/* Trigger the popup menu to appear */
 	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, (event != NULL) ? event->button : 0, gdk_event_get_time ((GdkEvent*)event));
-}
-
-void
-view_search_engine_menu (GtkWidget *widget,  Browser *b)
-{
-	GtkWidget *menu;
-	GtkWidget *duck_duck;
-	GtkWidget *google;
-	
-	menu = gtk_menu_new ();
-
-	duck_duck = gtk_check_menu_item_new_with_label ("Duck Duck Go");
-	google = gtk_check_menu_item_new_with_label ("Google");
-	
-	/* Set initial state of toggle to show if menubar is visible */
-	//gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (hide_menu_bar_item), gtk_widget_get_visible (b->menubar));
-	//gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (hide_status_bar_item), gtk_widget_get_visible (GTK_WIDGET (b->status_bar)));
-	
-	//g_signal_connect (duck_duck, "activate", G_CALLBACK (toggle_widget), b->menubar);
-	//g_signal_connect (google, "activate", G_CALLBACK (toggle_widget), b->status_bar);
-	
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), duck_duck);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), google);
-	
-	gtk_widget_show_all (menu);
-	
-	/* Trigger the popup menu to appear
-	 * 
-	 * Look into GtkMenuPositionFunc() to better position the menu
-	 * 
-	 */
-	//if (!gtk_menu_get_attach_widget (GTK_MENU (menu)))
-		//gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (widget), NULL);
-	
-	//gtk_menu_popup (GTK_MENU (menu), NULL, NULL, (GtkMenuPositionFunc) search_engine_menu_popup_position_menu, widget, 0, gdk_event_get_time (event));
-	menu_dropdown (GTK_MENU (menu), GTK_WIDGET (widget));
 }
 
 void

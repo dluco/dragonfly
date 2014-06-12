@@ -99,6 +99,7 @@ browser_new ()
 	
 	/* Toolbar */
 	b->toolbar = create_toolbar (b);
+	b->engine_menu = create_engine_menu(b);
 	
 	/* Scrolled Window */
 	b->scrolled_window = gtk_scrolled_window_new (NULL, NULL);

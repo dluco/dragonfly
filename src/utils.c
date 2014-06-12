@@ -37,36 +37,47 @@ buildpath(const char *path) {
 	return apath;
 }
 
-SearchEngine *
-load_engines (const gchar *enginefile)
+void
+load_engines(void)
 {
 	GKeyFile *key_file;
-	gchar **group_list;
+	gchar *path, **group_list;
 	gsize num_groups;
+	SearchEngine *current, *rear;
 	int i;
-	SearchEngine *engine_list, *current;
 	
-	key_file = g_key_file_new ();
+	path = g_build_filename(g_get_user_config_dir(), PACKAGE, "engines", NULL);
+	if (!g_file_test(path, G_FILE_TEST_EXISTS)) {
+		/* engine file does not exist */
+		fprintf(stderr, "%s: cannot load search engine file - %s\n", PACKAGE, path);
+		return;
+	}
 	
-	g_key_file_load_from_file (key_file, enginefile, G_KEY_FILE_KEEP_COMMENTS, NULL);
+	key_file = g_key_file_new();
+	g_key_file_load_from_file(key_file, path, G_KEY_FILE_KEEP_COMMENTS, NULL);
+	g_free(path);
+	group_list = g_key_file_get_groups(key_file, &num_groups);
 	
-	group_list = g_key_file_get_groups (key_file, &num_groups);
-	
+	rear = engine_list;
 	for (i = 0; i < num_groups; i++) {
-		if (!(current = (SearchEngine*) malloc (sizeof (SearchEngine)))) {
-			fprintf (stderr, "Error: Failed to allocate memory\n");
+		if (!(current = (SearchEngine*)malloc(sizeof(SearchEngine)))) {
+			fprintf(stderr, "%s: Failed to allocate memory\n", PACKAGE);
 		}
-		
+		if (i == 0) {
+			engine_list = current;
+			rear = current;
+		} else {
+			rear->next = current;
+			rear = current;
+		}
 		current->name = g_key_file_get_string (key_file, group_list[i], "name", NULL);
 		current->text = g_key_file_get_string (key_file, group_list[i], "text", NULL);
 		current->url = g_key_file_get_string (key_file, group_list[i], "uri", NULL);
-		
 		current->next = NULL;
-		engine_list = current;
 	}
 	
 	g_strfreev (group_list);
 	g_key_file_free (key_file);
 	
-	return engine_list;
+	return;
 }

@@ -17,19 +17,21 @@ typedef struct Browser {
 	GtkWidget *window;
 	GtkWidget *vbox, *menubar, *toolbar, *pane, *scrolled_window;
 	GtkWidget *uri_entry, *search_engine_entry;
+	GtkWidget *engine_menu;
 	GtkToolItem *back_button, *forward_button, *refresh_button, *home_button;
 	GtkStatusbar *status_bar;
 	WebKitWebView *webview;
 	WebKitWebInspector *inspector;
 	gint progress;
 	guint status_context_id;
-	char *title;
 	SearchEngine *engine;
+	char *title;
 	gboolean fullscreen, isinspecting, zoomed;
 	struct Browser *next;
 } Browser;
 
 extern Browser *browsers;
+extern SearchEngine *engine_list;
 extern char *cookiefile;
 
 #include "about.h"

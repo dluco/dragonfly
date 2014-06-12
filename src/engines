@@ -16,4 +16,4 @@ uri=http://en.wikipedia.org/wiki/Special:Search/%s
 [Yahoo]
 name=Yahoo
 text=Yahoo Web Search
-uri=http://search.yahoo.com/search?p=
+uri=http://search.yahoo.com/search?p=%s

@@ -222,23 +222,28 @@ create_menubar (Browser *b)
 	gtk_widget_show (view_item);
 	gtk_widget_show (tools_item);
 	gtk_widget_show (help_item);
-	
-	//gtk_widget_show (menubar);
-	
+		
 	return (GtkWidget*)menubar;
 }
 
 GtkWidget *
-create_engine_menu (SearchEngine *engine_list, Browser *b)
+create_engine_menu (Browser *b)
 {
 	GtkWidget *menu;
-	int length;
+	GtkWidget *item;
+	SearchEngine *current;
 	
-	menu = gtk_menu_new ();
+	menu = gtk_menu_new();
+		
+	current = engine_list;
+	while (current) {
+		item = gtk_menu_item_new_with_label(current->name);
+		gtk_menu_append(GTK_MENU(menu), item);
+		g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(set_search_engine), b);
+		gtk_widget_show(GTK_WIDGET(item));
+		
+		current = current->next;
+	}
 	
-	length = (sizeof (engine_list)) / (sizeof (SearchEngine));
-	
-	printf ("length = %d\n", length);
-	
-	return (GtkWidget *) menu;
+	return (GtkWidget*)menu;
 }
