@@ -73,9 +73,8 @@ extern char *cookiefile;
 #define HOME_PAGE "https://duckduckgo.com/"
 #define ENGINE "Duck Duck Go"
 
-#define COOKIE_FILE "cookies.txt"
-#define STYLE_FILE "style.css"
-#define ENGINE_FILE "engines"
+#define COOKIE_FILE "~/.config/dragonfly/cookies.txt"
+#define STYLE_FILE "~/.config/dragonfly/style.css"
 #define CA_FILE "/etc/ssl/certs/ca-certificates.crt"
 #define DOWNLOAD_DIR "~/Downloads/"
  
