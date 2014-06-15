@@ -65,7 +65,7 @@ context_menu_popup (GtkWidget *widget, GdkEventButton *event, Browser *b)
 WebKitWebView *
 create_window (WebKitWebView  *v, WebKitWebFrame *f, Browser *b)
 {
-	Browser *n = browser_new ();
+	Browser *n = browser_new (conf_copy(b->conf));
 	return n->webview;
 }
 
@@ -385,19 +385,11 @@ menu_dropdown (GtkMenu *menu, GtkWidget *widget)
 void
 set_search_engine(GtkWidget *w, Browser *b)
 {
-	const gchar *name;
 	SearchEngine *s;
-	
-	name = gtk_menu_item_get_label(GTK_MENU_ITEM(w));
-	
-	s = engine_list;
-	while (s) {
-		if (strncmp(name, s->name, strlen(name)) == 0) {
-			browser_set_default_search_engine(b, s);
-			break;
-		}
-		s = s->next;
-	}
+		
+	s = search_engine_list_find(gtk_menu_item_get_label(GTK_MENU_ITEM(w)));
+	if (s)
+		browser_set_default_search_engine(b, s);
 }
 
 void

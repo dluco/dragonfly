@@ -6,7 +6,7 @@ CC=gcc
 CFLAGS=-g -Wall $(shell pkg-config --cflags gtk+-2.0 webkit-1.0) -DVERSION=\"${VERSION}\" -DPACKAGE=\"${PACKAGE}\"
 LDFLAGS+=$(shell pkg-config --libs gtk+-2.0 webkit-1.0)
 
-OBJ=about.o browser.o callback.o cookie.o dialog.o download.o main.o menu.o search.o toolbar.o utils.o
+OBJ=about.o browser.o callback.o config.o cookie.o dialog.o download.o main.o menu.o search.o searchengine.o toolbar.o utils.o
 
 all: dragonfly
 
@@ -25,6 +25,10 @@ browser.o: browser.c browser.h
 callback.o: callback.c callback.h
 	@echo CC -c callback.c
 	@$(CC) -c $(CFLAGS) callback.c
+
+config.o: config.c config.h
+	@echo CC -c config.c
+	@$(CC) -c $(CFLAGS) config.c
 	
 cookie.o: cookie.c cookie.h
 	@echo CC -c cookie.c
@@ -49,6 +53,10 @@ menu.o: menu.c menu.h
 search.o: search.c search.h
 	@echo CC -c search.c
 	@$(CC) -c $(CFLAGS) search.c
+
+searchengine.o: searchengine.c searchengine.h
+	@echo CC -c searchengine.c
+	@$(CC) -c $(CFLAGS) searchengine.c
 	
 toolbar.o: toolbar.c toolbar.h
 	@echo CC -c toolbar.c

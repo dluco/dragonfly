@@ -1,0 +1,15 @@
+[Default]
+version=0.3
+useragent=Mozilla/5.0 (X11; U; Unix; en-US) AppleWebKit/537.15 (KHTML, like Gecko) Chrome/24.0.1295.0 Safari/537.15
+homepage=https://duckduckgo.com/
+download-dir=~/Downloads/
+enableplugins=true
+enablescripts=true
+enablefileaccess=true
+strictssl=false
+enableinspector=true
+loadimages=true
+enablespatialbrowsing=false
+enablespellchecking=true
+hidebackground=false
+fullcontentzoom=true

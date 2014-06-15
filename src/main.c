@@ -2,22 +2,6 @@
 
 #include <getopt.h>
 
-typedef struct {
-	gchar *useragent;
-	gchar *homepage;
-	gchar *downloaddir;
-	gboolean enableplugins;
-	gboolean enablescripts;
-	gboolean enablefileaccess;
-	gboolean strictssl;
-	gboolean enableinspector;
-	gboolean loadimages;
-	gboolean enablespatialbrowsing;
-	gboolean enablespellchecking;
-	gboolean hidebackground;
-	gboolean fullcontentzoom;
-} Conf;
-
 Browser *browsers = NULL;
 SearchEngine *engine_list = NULL;
 char *cookiefile;
@@ -133,6 +117,7 @@ load_config_file (Conf *conf)
 	
 	conf->useragent = g_key_file_get_string (key_file, "Default", "useragent", NULL);
 	conf->homepage = g_key_file_get_string (key_file, "Default", "homepage", NULL);
+	conf->engine = g_key_file_get_string (key_file, "Default", "engine", NULL);
 	conf->downloaddir = g_key_file_get_string (key_file, "Default", "download-dir", NULL);
 	conf->enableplugins = g_key_file_get_boolean (key_file, "Default", "enableplugins", NULL);
 	conf->enablescripts = g_key_file_get_boolean (key_file, "Default", "enablescripts", NULL);
@@ -229,6 +214,7 @@ save_config_file (Conf *conf)
 	g_key_file_set_string (key_file, "Default", "version", VERSION);
 	g_key_file_set_string (key_file, "Default", "useragent", conf->useragent);
 	g_key_file_set_string (key_file, "Default", "homepage", conf->homepage);
+	g_key_file_set_string (key_file, "Default", "engine", conf->engine);
 	g_key_file_set_string (key_file, "Default", "download-dir", conf->downloaddir);
 	g_key_file_set_boolean (key_file, "Default", "enableplugins", conf->enableplugins);
 	g_key_file_set_boolean (key_file, "Default", "enablescripts", conf->enablescripts);
@@ -289,6 +275,7 @@ main (int argc, char *argv[])
 	
 	conf->useragent = USER_AGENT;
 	conf->homepage = HOME_PAGE;
+	conf->engine = ENGINE;
 	conf->downloaddir = DOWNLOAD_DIR;
 	conf->enableplugins = ENABLE_PLUGINS;
 	conf->enablescripts = ENABLE_SCRIPTS;
@@ -304,7 +291,7 @@ main (int argc, char *argv[])
 	load_config_file (conf);
 	save_config_file (conf);
 	
-	b = browser_new ();
+	b = browser_new (conf);
 	gtk_window_set_title (GTK_WINDOW (b->window), "Dragonfly");
 	
 	//gchar* uri = (gchar*) (argc > 1 ? argv[1] : HOME_PAGE);

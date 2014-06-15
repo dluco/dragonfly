@@ -2,53 +2,43 @@
 
 SearchEngine *
 browser_get_default_search_engine (Browser *b)
-{
-	SearchEngine *engine;
-	
-	if (!(engine = (SearchEngine*) malloc (sizeof (SearchEngine)))) {
-		fprintf (stderr, "Error: Failed to allocate memory\n");
-	}
-	
-	engine->name = "Duck Duck Go";
-	engine->text = "Search engine!";
-	engine->url = "https://duckduckgo.com/?q=";
-	engine->next = NULL;
-	
-	return engine;
+{	
+	return b->engine;
 }
 
 void
 browser_set_default_search_engine (Browser *b, SearchEngine *engine)
 {
 	b->engine = engine;
+	b->conf->engine = engine->name;
 }
 
 void
-browser_set_settings (Browser *b)
+browser_set_settings (Browser *b, Conf *conf)
 {
 	WebKitWebSettings *settings;
 	
 	settings = webkit_web_view_get_settings (b->webview);
 	
 	/* Apply default settings from config.h */
-	g_object_set (G_OBJECT (settings), "user-agent", USER_AGENT, NULL);
-	g_object_set (G_OBJECT (settings), "auto-load-images", LOAD_IMAGES, NULL);
-	g_object_set (G_OBJECT (settings), "enable-plugins", ENABLE_PLUGINS, NULL);
-	g_object_set (G_OBJECT (settings), "enable-scripts", ENABLE_SCRIPTS, NULL);
-	g_object_set (G_OBJECT (settings), "enable-spatial-navigation", ENABLE_SPATIAL_BROWSING, NULL);
-	g_object_set (G_OBJECT (settings), "enable-spell-checking", ENABLE_SPELL_CHECKING, NULL);
-	g_object_set (G_OBJECT (settings), "enable-file-access-from-file-uris", ENABLE_FILE_ACCESS, NULL);
-	g_object_set (G_OBJECT (settings), "enable-developer-extras", ENABLE_INSPECTOR, NULL);
+	g_object_set (G_OBJECT (settings), "user-agent", conf->useragent, NULL);
+	g_object_set (G_OBJECT (settings), "auto-load-images", conf->loadimages, NULL);
+	g_object_set (G_OBJECT (settings), "enable-plugins", conf->enableplugins, NULL);
+	g_object_set (G_OBJECT (settings), "enable-scripts", conf->enablescripts, NULL);
+	g_object_set (G_OBJECT (settings), "enable-spatial-navigation", conf->enablespatialbrowsing, NULL);
+	g_object_set (G_OBJECT (settings), "enable-spell-checking", conf->enablespellchecking, NULL);
+	g_object_set (G_OBJECT (settings), "enable-file-access-from-file-uris", conf->enablefileaccess, NULL);
+	g_object_set (G_OBJECT (settings), "enable-developer-extras", conf->enableinspector, NULL);
 	
-	webkit_web_view_set_transparent (b->webview, HIDE_BACKGROUND);
-	webkit_web_view_set_full_content_zoom (b->webview, FULL_CONTENT_ZOOM);
+	webkit_web_view_set_transparent (b->webview, conf->hidebackground);
+	webkit_web_view_set_full_content_zoom (b->webview, conf->fullcontentzoom);
 	
 	/* Initialize fullscreen, zoomed, and isinspecting */
 	b->fullscreen = FALSE;
 	b->isinspecting = FALSE;
 	b->zoomed = FALSE;
 	
-	if(ENABLE_INSPECTOR) {
+	if(conf->enableinspector) {
 		b->inspector = WEBKIT_WEB_INSPECTOR (webkit_web_view_get_inspector (b->webview));
 		g_signal_connect (G_OBJECT (b->inspector), "inspect-web-view",
 			G_CALLBACK (inspector_new), b);
@@ -68,7 +58,7 @@ browser_set_settings (Browser *b)
  * webinspector is called, which occupies the lower pane.
  */
 Browser *
-browser_new ()
+browser_new (Conf *conf)
 {
 	Browser *b;
 	
@@ -130,8 +120,6 @@ browser_new ()
 		"title-changed",
 		G_CALLBACK(title_change), b);
 	
-	browser_set_settings (b);
-	
 	/* Statusbar */
 	b->status_bar = GTK_STATUSBAR (gtk_statusbar_new ());
 	b->status_context_id = gtk_statusbar_get_context_id (b->status_bar, "Link Hover");
@@ -162,8 +150,12 @@ browser_new ()
 	b->next = browsers;
 	browsers = b;
 	
+	browser_set_settings (b, conf);
+	
 	/* Search Engine */
-	b->engine = browser_get_default_search_engine (b);
+	//b->engine = browser_get_default_search_engine (b);
+	b->engine = search_engine_list_find(conf->engine);
+	b->conf = conf;
 	
 	gtk_widget_show (b->window);
 	
