@@ -44,7 +44,7 @@ typedef struct Browser_t {
 	SearchEngine *engine;
 	Conf *conf;
 	char *title;
-	gboolean fullscreen, isinspecting, zoomed;
+	gboolean fullscreen, isinspecting, maximized, zoomed;
 	struct Browser_t *next;
 } Browser;
 

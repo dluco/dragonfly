@@ -108,6 +108,7 @@ load_config_file (Conf *conf)
 	/* check if file exists */
 	if (!g_file_test (path, G_FILE_TEST_EXISTS)) {
 		/* config file does not exist - create with defaults */
+		fprintf(stderr, "%s: config file does not exist, creating\n", PACKAGE);
 		create_config_file (path);
 	}
 	
@@ -265,7 +266,7 @@ main (int argc, char *argv[])
 	Browser *b;
 	
 	gtk_init(&argc, &argv);
-	parse_args(argc, argv);
+//	parse_args(argc, argv);
 	
 	g_set_application_name("Dragonfly");
 	
@@ -294,8 +295,8 @@ main (int argc, char *argv[])
 	b = browser_new (conf);
 	gtk_window_set_title (GTK_WINDOW (b->window), "Dragonfly");
 	
-	//gchar* uri = (gchar*) (argc > 1 ? argv[1] : HOME_PAGE);
-	gchar *uri = (gchar*) HOME_PAGE;
+	gchar* uri = (gchar*) (argc > 1 ? argv[1] : b->conf->homepage);
+//	gchar *uri = (gchar*) HOME_PAGE;
 	webkit_web_view_load_uri (b->webview, uri);
 	
 	gtk_main();

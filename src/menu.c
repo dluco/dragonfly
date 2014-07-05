@@ -173,7 +173,7 @@ create_menubar (Browser *b)
 	g_signal_connect (G_OBJECT (zoom_out_item), "activate", G_CALLBACK (zoom_out), b);
 	g_signal_connect (G_OBJECT (zoom_reset_item), "activate", G_CALLBACK (zoom_reset), b);
 	g_signal_connect (G_OBJECT (fullscreen_item), "activate", G_CALLBACK (fullscreen), b);
-	//g_signal_connect (G_OBJECT (settings_item), "activate", G_CALLBACK (settings), b);
+//	g_signal_connect (G_OBJECT (settings_item), "activate", G_CALLBACK (temp_func), b);
 	g_signal_connect (G_OBJECT (inspector_item), "activate", G_CALLBACK (inspector_toggle), b);
 	g_signal_connect (G_OBJECT (source_item), "activate", G_CALLBACK (view_source), b);
 	g_signal_connect (G_OBJECT (about_item), "activate", G_CALLBACK (about), b);

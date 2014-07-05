@@ -34,6 +34,7 @@ void title_change(WebKitWebView *view, WebKitWebFrame *frame, const char *title,
 void update_browser (Browser *b);
 void view_context_menu_popup (GtkWidget *widget, GdkEventButton *event,  Browser *b);
 void view_source (GtkWidget *w, Browser *b);
+void window_state_event(GtkWidget *w, Browser *b);
 void zoom_in (GtkWidget* widget, Browser *b);
 void zoom_out (GtkWidget* widget, Browser *b);
 void zoom_reset (GtkWidget* widget, Browser *b);

@@ -74,15 +74,15 @@ create_window (WebKitWebView  *v, WebKitWebFrame *f, Browser *b)
  * browser linked list.
  */
 void
-destroy_browser (Browser *b)
+destroy_browser(Browser *b)
 {
 	Browser *p;
 	
-	webkit_web_view_stop_loading (b->webview);
-	gtk_widget_destroy (GTK_WIDGET (b->webview));
-	gtk_widget_destroy (b->scrolled_window);
-	gtk_widget_destroy (b->vbox);
-	gtk_widget_destroy (b->window);
+	webkit_web_view_stop_loading(b->webview);
+	gtk_widget_destroy(GTK_WIDGET (b->webview));
+	gtk_widget_destroy(b->scrolled_window);
+	gtk_widget_destroy(b->vbox);
+	gtk_widget_destroy(b->window);
 	
 	for (p = browsers; p && p->next != b; p = p->next);
 	
@@ -92,10 +92,10 @@ destroy_browser (Browser *b)
 		browsers = b->next;
 	}
 	
-	free (b);
+	free(b);
 
 	if (browsers == NULL)
-		gtk_main_quit ();
+		gtk_main_quit();
 }
 
 /*
@@ -459,6 +459,12 @@ view_source (GtkWidget *w, Browser *b)
 	state = webkit_web_view_get_view_source_mode (b->webview);
 	webkit_web_view_set_view_source_mode (b->webview, !state);
 	refresh (w, b);
+}
+
+void
+window_state_event(GtkWidget *w, Browser *b)
+{
+	b->maximized = (gdk_window_get_state(gtk_widget_get_window(w)) & GDK_WINDOW_STATE_MAXIMIZED) ? TRUE: FALSE;
 }
 
 /*

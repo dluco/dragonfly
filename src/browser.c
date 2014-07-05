@@ -77,6 +77,7 @@ browser_new (Conf *conf)
 	g_signal_connect (G_OBJECT (b->window),
 		"destroy",
 		G_CALLBACK (destroy_window), b);
+	g_signal_connect(G_OBJECT(b->window), "window-state-event", G_CALLBACK(window_state_event), b);
 	
 	/* Pane */
 	b->pane = gtk_vpaned_new ();
