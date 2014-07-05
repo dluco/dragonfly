@@ -63,9 +63,9 @@ context_menu_popup (GtkWidget *widget, GdkEventButton *event, Browser *b)
  * Create a new browser instance with the provided webview.
  */
 WebKitWebView *
-create_window (WebKitWebView  *v, WebKitWebFrame *f, Browser *b)
+create_window(WebKitWebView  *v, WebKitWebFrame *f, Browser *b)
 {
-	Browser *n = browser_new (conf_copy(b->conf));
+	Browser *n = browser_new(conf_copy(b->conf));
 	return n->webview;
 }
 
@@ -464,7 +464,7 @@ view_source (GtkWidget *w, Browser *b)
 void
 window_state_event(GtkWidget *w, Browser *b)
 {
-	b->maximized = (gdk_window_get_state(gtk_widget_get_window(w)) & GDK_WINDOW_STATE_MAXIMIZED) ? TRUE: FALSE;
+	b->conf->windowstate = (gdk_window_get_state(gtk_widget_get_window(w)) & GDK_WINDOW_STATE_MAXIMIZED) ? TRUE : FALSE;
 }
 
 /*

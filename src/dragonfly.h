@@ -28,6 +28,7 @@ typedef struct conf_t {
 	gboolean enablespellchecking;
 	gboolean hidebackground;
 	gboolean fullcontentzoom;
+	gboolean windowstate;
 } Conf;
 
 typedef struct Browser_t {
@@ -44,7 +45,7 @@ typedef struct Browser_t {
 	SearchEngine *engine;
 	Conf *conf;
 	char *title;
-	gboolean fullscreen, isinspecting, maximized, zoomed;
+	gboolean fullscreen, isinspecting, zoomed;
 	struct Browser_t *next;
 } Browser;
 

@@ -65,7 +65,7 @@ browser_new (Conf *conf)
 	if (!(b = malloc (sizeof (Browser)))) {
 		fprintf (stderr, "Error: Failed to allocate memory\n");
 	}
-	
+	b->conf = conf;
 	b->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	
 	gtk_window_set_wmclass (GTK_WINDOW (b->window), "dragonfly", "Dragonfly");
@@ -77,7 +77,7 @@ browser_new (Conf *conf)
 	g_signal_connect (G_OBJECT (b->window),
 		"destroy",
 		G_CALLBACK (destroy_window), b);
-	g_signal_connect(G_OBJECT(b->window), "window-state-event", G_CALLBACK(window_state_event), b);
+	//g_signal_connect(G_OBJECT(b->window), "window-state-event", G_CALLBACK(window_state_event), b);
 	
 	/* Pane */
 	b->pane = gtk_vpaned_new ();
@@ -151,14 +151,11 @@ browser_new (Conf *conf)
 	b->next = browsers;
 	browsers = b;
 	
-	browser_set_settings (b, conf);
+	browser_set_settings(b, conf);
 	
-	/* Search Engine */
-	//b->engine = browser_get_default_search_engine (b);
 	b->engine = search_engine_list_find(conf->engine);
-	b->conf = conf;
 	
-	gtk_widget_show (b->window);
+	gtk_widget_show(b->window);
 	
 	return b;
 }
