@@ -464,7 +464,7 @@ view_source (GtkWidget *w, Browser *b)
 void
 window_state_event(GtkWidget *w, Browser *b)
 {
-//	main_conf->windowstate = (gdk_window_get_state(gtk_widget_get_window(w)) & GDK_WINDOW_STATE_MAXIMIZED) ? TRUE : FALSE;
+	main_conf->windowstate = (gdk_window_get_state(gtk_widget_get_window(w)) & GDK_WINDOW_STATE_MAXIMIZED) ? TRUE : FALSE;
 }
 
 /*
