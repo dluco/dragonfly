@@ -2,7 +2,7 @@
 
 #include <getopt.h>
 
-extern Conf *default_conf;
+Conf *main_conf = NULL;
 Browser *browsers = NULL;
 SearchEngine *engine_list = NULL;
 char *cookiefile;
@@ -11,7 +11,7 @@ char *download_dir;
 char *enginefile;
 
 static void
-setup(void)
+init(void)
 {
 	SoupSession *s;
 	
@@ -32,6 +32,11 @@ setup(void)
 	
 	/* search engines */
 	load_engines();
+	
+	/* conf for all browser instances */
+	main_conf = conf_new();
+	conf_init(main_conf);
+	conf_load_from_file(main_conf);
 }
 
 /*
@@ -47,7 +52,7 @@ cleanup (void)
 	g_free (download_dir);
 	g_free (enginefile);
 	
-	conf_save_to_file(default_conf);
+	conf_save_to_file(main_conf);
 }
 
 static void
@@ -92,16 +97,12 @@ main (int argc, char *argv[])
 	
 	g_set_application_name("Dragonfly");
 	
-	setup();
+	init();
 	
-	default_conf = conf_new();
-	conf_init(default_conf);
-	conf_load_from_file(default_conf);
-	
-	b = browser_new(default_conf);
+	b = browser_new(main_conf);
 	gtk_window_set_title(GTK_WINDOW(b->window), "Dragonfly");
 	
-	gchar* uri = (gchar*) (argc > 1 ? argv[1] : b->conf->homepage);
+	gchar* uri = (gchar*) (argc > 1 ? argv[1] : main_conf->homepage);
 	webkit_web_view_load_uri(b->webview, uri);
 	
 	gtk_main();

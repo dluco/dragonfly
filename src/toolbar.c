@@ -1,13 +1,19 @@
 #include "dragonfly.h"
 
+#include <gdk/gdkkeysyms.h>
+
 GtkWidget*
 create_toolbar (Browser *b)
 {
 	GtkWidget *toolbar;
+	GtkAccelGroup *accel_group;
 	GtkToolItem *item;
 	GtkWidget *h_paned;
 	
 	toolbar = gtk_toolbar_new ();
+
+	/* Create accelgroup */
+	accel_group = gtk_accel_group_new ();
 
 	gtk_toolbar_set_orientation (GTK_TOOLBAR (toolbar), GTK_ORIENTATION_HORIZONTAL);
 	gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_BOTH_HORIZ);
@@ -67,8 +73,8 @@ create_toolbar (Browser *b)
 	g_signal_connect (G_OBJECT (b->home_button), "clicked", G_CALLBACK (go_home), b);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), b->home_button, -1);
 	
-	/* Set up accelerators (keyboard shortcuts)
-	gtk_widget_add_accelerator (GTK_WIDGET (b->back_button), "activate", accel_group, GDK_k, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE); */
+	/* Set up accelerators (keyboard shortcuts) */
+	gtk_widget_add_accelerator (GTK_WIDGET (b->back_button), "clicked", accel_group, GDK_Left, GDK_MOD1_MASK, GTK_ACCEL_VISIBLE);
 	
 	/* Set up right-click context menu */
 	g_signal_connect (GTK_OBJECT (toolbar), "button-press-event", G_CALLBACK (context_menu_popup), b);

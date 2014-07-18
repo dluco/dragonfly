@@ -10,7 +10,7 @@ void
 browser_set_default_search_engine (Browser *b, SearchEngine *engine)
 {
 	b->engine = engine;
-	b->conf->engine = engine->name;
+	main_conf->engine = engine->name;
 }
 
 void
@@ -20,7 +20,7 @@ browser_set_settings (Browser *b, Conf *conf)
 	
 	settings = webkit_web_view_get_settings (b->webview);
 	
-	/* Apply default settings from config.h */
+	/* Apply settings from conf */
 	g_object_set (G_OBJECT (settings), "user-agent", conf->useragent, NULL);
 	g_object_set (G_OBJECT (settings), "auto-load-images", conf->loadimages, NULL);
 	g_object_set (G_OBJECT (settings), "enable-plugins", conf->enableplugins, NULL);
@@ -50,6 +50,13 @@ browser_set_settings (Browser *b, Conf *conf)
 			G_CALLBACK (inspector_finished), b);
 		b->isinspecting = FALSE;
 	}
+	
+	b->engine = search_engine_list_find(conf->engine);
+
+	/* check if window should be maximized */
+	if (conf->windowstate) {
+		gtk_window_maximize(GTK_WINDOW(b->window));
+	}
 }
 
 /*
@@ -65,7 +72,7 @@ browser_new (Conf *conf)
 	if (!(b = malloc (sizeof (Browser)))) {
 		fprintf (stderr, "Error: Failed to allocate memory\n");
 	}
-	b->conf = conf;
+
 	b->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	
 	gtk_window_set_wmclass (GTK_WINDOW (b->window), "dragonfly", "Dragonfly");
@@ -77,7 +84,7 @@ browser_new (Conf *conf)
 	g_signal_connect (G_OBJECT (b->window),
 		"destroy",
 		G_CALLBACK (destroy_window), b);
-	//g_signal_connect(G_OBJECT(b->window), "window-state-event", G_CALLBACK(window_state_event), b);
+	g_signal_connect(G_OBJECT(b->window), "window-state-event", G_CALLBACK(window_state_event), b);
 	
 	/* Pane */
 	b->pane = gtk_vpaned_new ();
@@ -152,8 +159,6 @@ browser_new (Conf *conf)
 	browsers = b;
 	
 	browser_set_settings(b, conf);
-	
-	b->engine = search_engine_list_find(conf->engine);
 	
 	gtk_widget_show(b->window);
 	

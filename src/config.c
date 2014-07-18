@@ -1,8 +1,6 @@
 #include "dragonfly.h"
 #include <string.h>
 
-Conf *default_conf;
-
 Conf *
 conf_copy(Conf *conf)
 {

@@ -43,12 +43,12 @@ typedef struct Browser_t {
 	gint progress;
 	guint status_context_id;
 	SearchEngine *engine;
-	Conf *conf;
 	char *title;
 	gboolean fullscreen, isinspecting, zoomed;
 	struct Browser_t *next;
 } Browser;
 
+extern Conf *main_conf;
 extern Browser *browsers;
 extern SearchEngine *engine_list;
 extern char *cookiefile;
