@@ -1,7 +1,7 @@
 Dragonfly
 =========
 
-Dragonfly is a web browser built with webkitgtk. It is designed to be fast and simple to use, and is inspired by projects such as surf, midori, and leafpad.
+Dragonfly is a lightweight webkit-based web browser. It is designed to be fast and simple to use.
 
 Dependencies
 ------------

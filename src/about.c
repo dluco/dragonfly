@@ -14,7 +14,7 @@ about (GtkWidget* widget, Browser *b)
 	/* Set program name, version, etc. */
 	gtk_about_dialog_set_program_name (GTK_ABOUT_DIALOG (about_dialog), "Dragonfly");
 	gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (about_dialog), VERSION);
-	gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG (about_dialog), "A simple webkit/gtk browser, in the style of surf and midori");
+	gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG (about_dialog), "A lightweight webkit browser");
 	
 	/* Set logo to display in dialog */
 	gtk_about_dialog_set_logo_icon_name (GTK_ABOUT_DIALOG (about_dialog), "web-browser");

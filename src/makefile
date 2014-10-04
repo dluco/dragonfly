@@ -1,10 +1,14 @@
-VERSION=0.3
+OUT = dragonfly
+VERSION ?= 0.3
 
-PACKAGE=dragonfly
+PACKAGE = dragonfly
 
-CC=gcc
-CFLAGS=-g -Wall $(shell pkg-config --cflags gtk+-2.0 webkit-1.0) -DVERSION=\"${VERSION}\" -DPACKAGE=\"${PACKAGE}\"
-LDFLAGS+=$(shell pkg-config --libs gtk+-2.0 webkit-1.0)
+DEFINES := -DVERSION=\"${VERSION}\" -DPACKAGE=\"${PACKAGE}\"
+
+CC = gcc
+PKGDEPS = gtk+-2.0 webkit-1.0
+CFLAGS := -g -Wall $(shell pkg-config --cflags ${PKGDEPS}) ${DEFINES}
+LDFLAGS := $(shell pkg-config --libs ${PKGDEPS})
 
 OBJ=about.o browser.o callback.o config.o cookie.o dialog.o download.o main.o menu.o search.o searchengine.o toolbar.o utils.o
 
@@ -12,7 +16,7 @@ all: dragonfly
 
 dragonfly: $(OBJ)
 	@echo CC -o dragonfly 
-	@$(CC) $(OBJ) $(LDFLAGS) -o dragonfly
+	@$(CC) $(OBJ) $(LDFLAGS) -o ${OUT}
 
 about.o: about.c about.h
 	@echo CC -c about.c
@@ -68,6 +72,9 @@ utils.o: utils.c utils.h
 	
 clean:
 	@echo cleaning
-	@rm -rf $(OBJ) dragonfly
-	
-.PHONY: all clean
+	@${RM} $(OBJ) ${OUT}
+
+strip: all
+	@strip --strip-all ${OUT}
+
+.PHONY: all clean debug strip
