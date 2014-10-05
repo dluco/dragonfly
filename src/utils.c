@@ -46,10 +46,10 @@ load_engines(void)
 	SearchEngine *current, *rear;
 	int i;
 	
-	path = g_build_filename(g_get_user_config_dir(), PACKAGE, "engines", NULL);
+	path = g_build_filename(g_get_user_config_dir(), "dragonfly", "engines", NULL);
 	if (!g_file_test(path, G_FILE_TEST_EXISTS)) {
 		/* engine file does not exist */
-		fprintf(stderr, "%s: cannot load search engine file - %s\n", PACKAGE, path);
+		fprintf(stderr, "%s: cannot load search engine file - %s\n", "dragonfly", path);
 		return;
 	}
 	
@@ -61,7 +61,7 @@ load_engines(void)
 	rear = engine_list;
 	for (i = 0; i < num_groups; i++) {
 		if (!(current = (SearchEngine*)malloc(sizeof(SearchEngine)))) {
-			fprintf(stderr, "%s: Failed to allocate memory\n", PACKAGE);
+			fprintf(stderr, "%s: Failed to allocate memory\n", "dragonfly");
 		}
 		if (i == 0) {
 			engine_list = current;

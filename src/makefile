@@ -1,16 +1,17 @@
 OUT = dragonfly
-VERSION ?= 0.3
+VERSION ?= 0.3.0
+DATADIR ?= /usr/share
 
-PACKAGE = dragonfly
-
-DEFINES := -DVERSION=\"${VERSION}\" -DPACKAGE=\"${PACKAGE}\"
+DEFINES := -DVERSION=\"${VERSION}\"
 
 CC = gcc
 PKGDEPS = gtk+-2.0 webkit-1.0
 CFLAGS := -g -Wall $(shell pkg-config --cflags ${PKGDEPS}) ${DEFINES}
 LDFLAGS := $(shell pkg-config --libs ${PKGDEPS})
 
-OBJ=about.o browser.o callback.o config.o cookie.o dialog.o download.o main.o menu.o search.o searchengine.o toolbar.o utils.o
+#OBJ=about.o browser.o callback.o config.o cookie.o dialog.o download.o main.o menu.o search.o searchengine.o toolbar.o utils.o
+SRC = $(wildcard *.c)
+OBJ = $(SRC:.c=.o)
 
 all: dragonfly
 

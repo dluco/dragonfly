@@ -78,7 +78,7 @@ parse_args (int argc, char **argv)
 					printf ("%s\n", optarg);
 				break;
 			case 'v':
-				printf ("%s\n", PACKAGE"-"VERSION);
+				printf ("%s\n", "dragonfly-"VERSION);
 				exit (0);
 			default:
 				printf ("%s\n", "chicken");

@@ -61,11 +61,11 @@ conf_load_from_file(Conf *conf)
 	GKeyFile *key_file;
 	gchar *path;
 	
-	path = g_build_filename(g_get_user_config_dir(), PACKAGE, PACKAGE "rc", NULL);
+	path = g_build_filename(g_get_user_config_dir(), "dragonfly", "dragonflyrc", NULL);
 	/* check if file exists */
 	if (!g_file_test(path, G_FILE_TEST_EXISTS)) {
 		/* config file does not exist - create with defaults */
-		fprintf(stderr, "%s: config file does not exist, creating\n", PACKAGE);
+		fprintf(stderr, "%s: config file does not exist, creating\n", "dragonfly");
 		conf_create_file(path);
 	}
 	
@@ -98,7 +98,7 @@ conf_new()
 	Conf *conf;
 	
 	if (!(conf = malloc(sizeof(*conf)))) {
-		fprintf(stderr, "%s: failed to allocate memory\n", PACKAGE);
+		fprintf(stderr, "%s: failed to allocate memory\n", "dragonfly");
 		return NULL;
 	}
 	return conf;
@@ -130,10 +130,10 @@ conf_save_to_file(Conf *conf)
 	g_key_file_set_boolean(key_file, "Default", "fullcontentzoom", conf->fullcontentzoom);
 	g_key_file_set_boolean(key_file, "Default", "windowstate", conf->windowstate);
 	
-	path = g_build_filename(g_get_user_config_dir(), PACKAGE, PACKAGE "rc", NULL);
+	path = g_build_filename(g_get_user_config_dir(), "dragonfly", "dragonfly" "rc", NULL);
 	g_key_file_save_to_file(key_file, path, NULL);
 	if (!g_file_test(path, G_FILE_TEST_EXISTS)) {
-		fprintf(stderr, "%s: error saving config file\n", PACKAGE);
+		fprintf(stderr, "%s: error saving config file\n", "dragonfly");
 	}
 	g_free(path);
 	
