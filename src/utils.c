@@ -1,18 +1,21 @@
-#include "dragonfly.h"
-
+#include <stdlib.h>
 #include <string.h>
+#include <glib.h>
 #include <glib/gstdio.h>
+#include "utils.h"
+#include "searchengine.h"
 
-char *
-buildpath(const char *path) {
+extern SearchEngine *engine_list;
+
+char * buildpath(const char *path) {
 	char *apath, *p;
 	FILE *f;
 
 	/* creating directory */
-	if(path[0] == '/') {
+	if (path[0] == '/') {
 		apath = g_strdup(path);
-	} else if(path[0] == '~') {
-		if(path[1] == '/') {
+	} else if (path[0] == '~') {
+		if (path[1] == '/') {
 			apath = g_strconcat(g_get_home_dir(), &path[1], NULL);
 		} else {
 			apath = g_strconcat(g_get_home_dir(), "/",
@@ -22,14 +25,14 @@ buildpath(const char *path) {
 		apath = g_strconcat(g_get_current_dir(), "/", path, NULL);
 	}
 
-	if((p = strrchr(apath, '/'))) {
+	if ((p = strrchr(apath, '/'))) {
 		*p = '\0';
 		g_mkdir_with_parents(apath, 0700);
 		g_chmod(apath, 0700); /* in case it existed */
 		*p = '/';
 	}
-	/* creating file (gives error when apath ends with "/") */
-	if((f = fopen(apath, "a"))) {
+	/* creating file(gives error when apath ends with "/") */
+	if ((f = fopen(apath, "a"))) {
 		g_chmod(apath, 0600); /* always */
 		fclose(f);
 	}
@@ -37,8 +40,7 @@ buildpath(const char *path) {
 	return apath;
 }
 
-void
-load_engines(void)
+void load_engines(void)
 {
 	GKeyFile *key_file;
 	gchar *path, **group_list;
@@ -60,7 +62,7 @@ load_engines(void)
 	
 	rear = engine_list;
 	for (i = 0; i < num_groups; i++) {
-		if (!(current = (SearchEngine*)malloc(sizeof(SearchEngine)))) {
+		if (!(current =(SearchEngine*)malloc(sizeof(SearchEngine)))) {
 			fprintf(stderr, "%s: Failed to allocate memory\n", "dragonfly");
 		}
 		if (i == 0) {
@@ -70,14 +72,14 @@ load_engines(void)
 			rear->next = current;
 			rear = current;
 		}
-		current->name = g_key_file_get_string (key_file, group_list[i], "name", NULL);
-		current->text = g_key_file_get_string (key_file, group_list[i], "text", NULL);
-		current->url = g_key_file_get_string (key_file, group_list[i], "uri", NULL);
+		current->name = g_key_file_get_string(key_file, group_list[i], "name", NULL);
+		current->text = g_key_file_get_string(key_file, group_list[i], "text", NULL);
+		current->url = g_key_file_get_string(key_file, group_list[i], "uri", NULL);
 		current->next = NULL;
 	}
 	
-	g_strfreev (group_list);
-	g_key_file_free (key_file);
+	g_strfreev(group_list);
+	g_key_file_free(key_file);
 	
 	return;
 }

@@ -2,7 +2,7 @@
 
 #include <getopt.h>
 
-Conf *main_conf = NULL;
+Config *main_conf = NULL;
 Browser *browsers = NULL;
 SearchEngine *engine_list = NULL;
 char *cookiefile;
@@ -10,8 +10,7 @@ char *stylefile;
 char *download_dir;
 char *enginefile;
 
-static void
-init(void)
+static void init(void)
 {
 	SoupSession *s;
 	
@@ -34,66 +33,31 @@ init(void)
 	load_engines();
 	
 	/* conf for all browser instances */
-	main_conf = conf_new();
-	conf_init(main_conf);
-	conf_load_from_file(main_conf);
+	main_conf = config_new();
+	config_init(main_conf);
+	config_load_from_file(main_conf);
 }
 
 /*
  * Destroy all browser instances
  */
-static void
-cleanup (void)
+static void cleanup(void)
 {
 	while(browsers)
-		destroy_browser (browsers);
-	g_free (cookiefile);
-	g_free (stylefile);
-	g_free (download_dir);
-	g_free (enginefile);
+		destroy_browser(browsers);
+	g_free(cookiefile);
+	g_free(stylefile);
+	g_free(download_dir);
+	g_free(enginefile);
 	
-	conf_save_to_file(main_conf);
+	config_save_to_file(main_conf);
 }
 
-static void
-parse_args (int argc, char **argv)
-{
-	int option_index = 0;
-	int index;
-	
-	struct option long_options[] = {
-		{"help", no_argument, 0, 'h'},
-		{"useragent", required_argument, 0, 'u'},
-		{"version", no_argument, 0, 'v'},
-		{0, 0, 0, 0}
-	};
-	
-	while ((index = getopt_long (argc, argv, "hu:v", long_options, &option_index)) != -1) {
-		switch (index) {
-			case 'h':
-				printf ("help!\n");
-				exit (0);
-			case 'u':
-				if (optarg)
-					printf ("%s\n", optarg);
-				break;
-			case 'v':
-				printf ("%s\n", "dragonfly-"VERSION);
-				exit (0);
-			default:
-				printf ("%s\n", "chicken");
-				break;
-		}
-	}
-}
-
-int
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	Browser *b;
 	
 	gtk_init(&argc, &argv);
-//	parse_args(argc, argv);
 	
 	g_set_application_name("Dragonfly");
 	
@@ -102,7 +66,7 @@ main (int argc, char *argv[])
 	b = browser_new(main_conf);
 	gtk_window_set_title(GTK_WINDOW(b->window), "Dragonfly");
 	
-	gchar* uri = (gchar*) (argc > 1 ? argv[1] : main_conf->homepage);
+	gchar* uri =(gchar*)(argc > 1 ? argv[1] : main_conf->homepage);
 	webkit_web_view_load_uri(b->webview, uri);
 	
 	gtk_main();

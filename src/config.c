@@ -1,12 +1,14 @@
-#include "dragonfly.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <glib.h>
+#include "config.h"
 
-Conf *
-conf_copy(Conf *conf)
+Config * config_copy(Config *conf)
 {
-	Conf *temp;
+	Config *temp;
 	
-	temp = conf_new();
+	temp = config_new();
 	
 	temp->useragent = g_strdup(conf->useragent);
 	temp->homepage = g_strdup(conf->homepage);
@@ -27,8 +29,7 @@ conf_copy(Conf *conf)
 	return temp;
 }
 
-void
-conf_create_file(gchar *pathname)
+void config_create_file(gchar *pathname)
 {
 	GKeyFile *key_file;
 	
@@ -55,8 +56,7 @@ conf_create_file(gchar *pathname)
 	g_key_file_free(key_file);
 }
 
-void
-conf_load_from_file(Conf *conf)
+void config_load_from_file(Config *conf)
 {
 	GKeyFile *key_file;
 	gchar *path;
@@ -66,12 +66,12 @@ conf_load_from_file(Conf *conf)
 	if (!g_file_test(path, G_FILE_TEST_EXISTS)) {
 		/* config file does not exist - create with defaults */
 		fprintf(stderr, "%s: config file does not exist, creating\n", "dragonfly");
-		conf_create_file(path);
+		config_create_file(path);
 	}
 	
-	key_file = g_key_file_new ();
-	g_key_file_load_from_file (key_file, path, G_KEY_FILE_KEEP_COMMENTS, NULL);
-	g_free (path);
+	key_file = g_key_file_new();
+	g_key_file_load_from_file(key_file, path, G_KEY_FILE_KEEP_COMMENTS, NULL);
+	g_free(path);
 	
 	conf->useragent = g_key_file_get_string(key_file, "Default", "useragent", NULL);
 	conf->homepage = g_key_file_get_string(key_file, "Default", "homepage", NULL);
@@ -89,13 +89,12 @@ conf_load_from_file(Conf *conf)
 	conf->fullcontentzoom = g_key_file_get_boolean(key_file, "Default", "fullcontentzoom", NULL);
 	conf->windowstate = g_key_file_get_boolean(key_file, "Default", "windowstate", NULL);
 	
-	g_key_file_free (key_file);
+	g_key_file_free(key_file);
 }
 
-Conf *
-conf_new()
+Config *config_new(void)
 {
-	Conf *conf;
+	Config *conf;
 	
 	if (!(conf = malloc(sizeof(*conf)))) {
 		fprintf(stderr, "%s: failed to allocate memory\n", "dragonfly");
@@ -104,8 +103,7 @@ conf_new()
 	return conf;
 }
 
-void
-conf_save_to_file(Conf *conf)
+void config_save_to_file(Config *conf)
 {
 	GKeyFile *key_file;
 	gchar *path;
@@ -140,8 +138,7 @@ conf_save_to_file(Conf *conf)
 	g_key_file_free(key_file);
 }
 
-void
-conf_init(Conf *conf)
+void config_init(Config *conf)
 {
 	conf->useragent = USER_AGENT;
 	conf->homepage = HOME_PAGE;

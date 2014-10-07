@@ -9,7 +9,6 @@ PKGDEPS = gtk+-2.0 webkit-1.0
 CFLAGS := -g -Wall $(shell pkg-config --cflags ${PKGDEPS}) ${DEFINES}
 LDFLAGS := $(shell pkg-config --libs ${PKGDEPS})
 
-#OBJ=about.o browser.o callback.o config.o cookie.o dialog.o download.o main.o menu.o search.o searchengine.o toolbar.o utils.o
 SRC = $(wildcard *.c)
 OBJ = $(SRC:.c=.o)
 
@@ -18,10 +17,6 @@ all: dragonfly
 dragonfly: $(OBJ)
 	@echo CC -o dragonfly 
 	@$(CC) $(OBJ) $(LDFLAGS) -o ${OUT}
-
-about.o: about.c about.h
-	@echo CC -c about.c
-	@$(CC) -c $(CFLAGS) about.c
 
 browser.o: browser.c browser.h
 	@echo CC -c browser.c
